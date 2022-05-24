@@ -62,7 +62,7 @@ For an easier use of the generated images, you can use the `Picture` component, 
 
 ```javascript
 import React from 'react'
-import { Picture } from 'react-image-optimization'
+import { Picture } from 'react-optimized-images'
 
 import CoffeeJpg from '../assets/coffee.jpg'
 
