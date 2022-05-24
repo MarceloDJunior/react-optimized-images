@@ -1,0 +1,43 @@
+{
+  "name": "react-optimized-images",
+  "description": "A package to generate and use webp images, keeping old browsers support.",
+  "version": "1.0.0",
+  "author": "Marcelo Dornelles Junior",
+  "license": "MIT",
+  "keywords": ["webp", "react", "images", "component", "optimize"],
+  "homepage": "https://github.com/MarceloDJunior/react-optimized-images#README",
+  "scripts": {
+    "build": "rollup -c",
+    "start": "rollup -c -w"
+  },
+  "bin": {
+    "convert-images": "scripts/convert-images.mjs"
+  },
+  "files": [
+    "dist"
+  ],
+  "main": "dist/csj/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/index.d.ts",
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^22.0.0",
+    "@rollup/plugin-node-resolve": "^13.3.0",
+    "@rollup/plugin-typescript": "^8.3.2",
+    "@types/react": "^18.0.9",
+    "@types/react-dom": "^18.0.4",
+    "babel-core": "^6.26.3",
+    "babel-runtime": "^6.26.0",
+    "node-find-folder": "^0.1.32",
+    "prettier": "^2.6.2",
+    "rollup": "^2.74.1",
+    "rollup-plugin-dts": "^4.2.1",
+    "rollup-plugin-typescript2": "^0.31.2",
+    "sharp": "^0.30.4",
+    "tiny-glob": "^0.2.9",
+    "typescript": "^4.6.4"
+  },
+  "peerDependencies": {
+    "react": "^16.8.0",
+    "react-dom": "^16.8.0"
+  }
+}
