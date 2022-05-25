@@ -2,6 +2,8 @@
 
 A light package to generate and use webp images, keeping old browsers support.
 
+NOTE: There is an issue using with Next.js in dev mode, see the workaround [here](#nextjs-issue).
+
 ## Table of contents
 
 - [Table of contents](#table-of-contents)
@@ -9,11 +11,12 @@ A light package to generate and use webp images, keeping old browsers support.
 - [Usage](#usage)
   - [Generate webp images](#generate-webp-images)
   - [Picture component](#picture-component)
+- [Next.js issue](#nextjs-issue)
 
 ## Installation
 
 ```
-npm install react-optimized-images
+npm install react-optimized-images --save
 ```
 
 or
@@ -44,7 +47,7 @@ And call it after build:
 
 #### Options
 
-The default build folder to look is `build` but you can change to which folder you want using the parameter `--build-folder`.
+The default build folder to look for images is `build`, but you can change to which folder you want using the parameter `--build-folder`.
 
 Example with Next.js:
 
@@ -71,7 +74,7 @@ export default function Home() {
     <div>
       <Picture src={CoffeeJpg.src} />
       {/* ..or if it comes from public folder */}
-      <Picture src='/coffee.jpg' >
+      <Picture src="/coffee.jpg" />
     </div>
   )
 }
@@ -91,3 +94,21 @@ The output will be like
 
 It uses the same properties from HTML `<img>` tag. The only mandatory property is `src`.
 
+## Next.js issue
+
+The picture component uses `<img>` onError event to determine if the webp image was found or not. In Next.js, this event is never triggered, so the images may be missing in dev mode. To avoid unnecessary fetch and keep this package light, I recommend to conditionally use a regular `<img>` in dev mode and use the `Picture` component only in production.
+
+Example:
+
+```javascript
+import React from 'react'
+import { Picture } from 'react-optimized-images'
+
+export const Image = () => {
+  if (process.env.NODE_ENV === 'development') {
+    return <img src="/coffee.jpg" />
+  }
+
+  return <Picture src="/coffee.jpg" />
+}
+```
