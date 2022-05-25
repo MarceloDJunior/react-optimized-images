@@ -1,7 +1,7 @@
 {
   "name": "react-optimized-images",
   "description": "A package to generate and use webp images, keeping old browsers support.",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "author": "Marcelo Dornelles Junior",
   "license": "MIT",
   "keywords": [
