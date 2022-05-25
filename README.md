@@ -1,6 +1,6 @@
 # react-optimized-images
 
-> A light package to generate and use webp images, keeping old browsers support.
+A light package to generate and use webp images, keeping old browsers support.
 
 ## Table of contents
 
