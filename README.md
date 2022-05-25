@@ -70,20 +70,20 @@ export default function Home() {
   return (
     <div>
       <Picture src={CoffeeJpg.src} />
-      {/* ..or */}
-      <Picture src='../assets/coffee.jpg' >
+      {/* ..or if it comes from public folder */}
+      <Picture src='/coffee.jpg' >
     </div>
   )
 }
 ```
 
-The output is
+The output will be like
 
 ```html
 <picture>
-  <source srcset="../assets/coffee.webp" type="image/webp" />
-  <source srcset="../assets/coffee.jpg" type="image/jpeg" />
-  <img src="../assets/coffee.jpg" />
+  <source srcset="/coffee.webp" type="image/webp" />
+  <source srcset="/coffee.jpg" type="image/jpeg" />
+  <img src="/coffee.jpg" />
 </picture>
 ```
 
