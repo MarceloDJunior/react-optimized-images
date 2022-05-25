@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 /******************************************************************************
 Copyright (c) Microsoft Corporation.
@@ -50,11 +50,17 @@ var getImageExtension = function (fileName) {
 };
 var Picture = function (_a) {
     var src = _a.src, props = __rest(_a, ["src"]);
+    var _b = useState(false), hasError = _b[0], setHasError = _b[1];
     var webpSrc = replaceExtension(src, 'webp');
+    var handleError = function () {
+        if (!hasError) {
+            setHasError(true);
+        }
+    };
     return (React.createElement("picture", null,
-        React.createElement("source", { srcSet: webpSrc || src, type: "image/webp" }),
+        !hasError && React.createElement("source", { srcSet: webpSrc, type: "image/webp" }),
         React.createElement("source", { srcSet: src, type: "image/".concat(getImageExtension(src)) }),
-        React.createElement("img", __assign({ src: src }, props))));
+        React.createElement("img", __assign({ src: src }, props, { onError: handleError }))));
 };
 
 export { Picture };

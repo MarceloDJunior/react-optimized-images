@@ -1,4 +1,4 @@
-import React, { DetailedHTMLProps, ImgHTMLAttributes } from 'react'
+import React, { DetailedHTMLProps, ImgHTMLAttributes, useState } from 'react'
 
 type Props = DetailedHTMLProps<
   ImgHTMLAttributes<HTMLImageElement>,
@@ -22,13 +22,20 @@ const getImageExtension = (fileName: string): string => {
 }
 
 export const Picture = ({ src, ...props }: Props) => {
+  const [hasError, setHasError] = useState(false)
   const webpSrc = replaceExtension(src, 'webp')
+
+  const handleError = () => {
+    if (!hasError) {
+      setHasError(true)
+    }
+  }
 
   return (
     <picture>
-      <source srcSet={webpSrc || src} type="image/webp" />
+      {!hasError && <source srcSet={webpSrc} type="image/webp" />}
       <source srcSet={src} type={`image/${getImageExtension(src)}`} />
-      <img src={src} {...props} />
+      <img src={src} {...props} onError={handleError} />
     </picture>
   )
 }
