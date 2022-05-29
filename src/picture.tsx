@@ -32,7 +32,7 @@ const getImageExtension = (fileName: string): string => {
   return fileName.substr(fileName.lastIndexOf('.') + 1).toLowerCase()
 }
 
-export const Picture = ({ src, ...props }: Props) => {
+export const Picture = ({ src, className, ...props }: Props) => {
   const [hasError, setHasError] = useState(false)
 
   const handleError = () => {
@@ -75,10 +75,10 @@ export const Picture = ({ src, ...props }: Props) => {
   }
 
   return (
-    <picture>
+    <picture className={className}>
       {!hasError && renderSources()}
       <source srcSet={src} type={`image/${extension}`} />
-      <img src={src} {...props} onError={handleError} />
+      <img src={src} className={className} {...props} onError={handleError} />
     </picture>
   )
 }

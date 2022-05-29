@@ -63,7 +63,7 @@ var getImageExtension = function (fileName) {
     return fileName.substr(fileName.lastIndexOf('.') + 1).toLowerCase();
 };
 var Picture = function (_a) {
-    var src = _a.src, props = __rest(_a, ["src"]);
+    var src = _a.src, className = _a.className, props = __rest(_a, ["src", "className"]);
     var _b = useState(false), hasError = _b[0], setHasError = _b[1];
     var handleError = function () {
         if (!hasError) {
@@ -86,10 +86,10 @@ var Picture = function (_a) {
             webpImages,
             regularImages));
     };
-    return (React.createElement("picture", null,
+    return (React.createElement("picture", { className: className },
         !hasError && renderSources(),
         React.createElement("source", { srcSet: src, type: "image/".concat(extension) }),
-        React.createElement("img", __assign({ src: src }, props, { onError: handleError }))));
+        React.createElement("img", __assign({ src: src, className: className }, props, { onError: handleError }))));
 };
 
 export { Picture };
