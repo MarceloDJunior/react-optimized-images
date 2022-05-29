@@ -18,12 +18,12 @@
     "start": "rollup -c -w"
   },
   "bin": {
-    "convert-images": "scripts/convert-images.js"
+    "convert-images": "scripts/convert-images.cjs"
   },
   "files": [
     "dist",
     "scripts",
-    "config.js"
+    "config.json"
   ],
   "types": "dist/index.d.ts",
   "dependencies": {
@@ -32,6 +32,7 @@
     "tiny-glob": "^0.2.9"
   },
   "devDependencies": {
+    "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^13.3.0",
     "@rollup/plugin-typescript": "^8.3.2",
     "@types/react": "^18.0.9",

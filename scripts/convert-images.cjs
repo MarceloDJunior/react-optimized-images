@@ -2,7 +2,9 @@
 const ff = require('node-find-folder')
 const glob = require('tiny-glob')
 const sharp = require('sharp')
-const { breakpoints, minWidth } = require('../config.js')
+
+const config = require('../config.json')
+const { breakpoints, minWidth } = config
 
 let buildFolderName = 'build'
 

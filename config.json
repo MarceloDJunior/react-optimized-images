@@ -1,0 +1,13 @@
+{
+  "breakpoints": [
+    {
+      "maxWidth": 576,
+      "resizeTo": 50
+    },
+    {
+      "maxWidth": 992,
+      "resizeTo": 70
+    }
+  ],
+  "minWidth": 200
+}

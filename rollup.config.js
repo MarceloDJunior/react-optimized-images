@@ -1,5 +1,6 @@
 import resolve from '@rollup/plugin-node-resolve'
 import typescript from '@rollup/plugin-typescript'
+import json from '@rollup/plugin-json'
 import dts from 'rollup-plugin-dts'
 
 const packageJson = require('./package.json')
@@ -14,7 +15,7 @@ export default [
         sourcemap: true,
       },
     ],
-    plugins: [resolve(), typescript({ tsconfig: './tsconfig.json' })],
+    plugins: [resolve(), typescript({ tsconfig: './tsconfig.json' }), json()],
   },
   {
     input: 'dist/types/src/index.d.ts',

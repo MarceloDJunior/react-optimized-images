@@ -1,6 +1,6 @@
 import React, { DetailedHTMLProps, ImgHTMLAttributes, useState } from 'react'
 
-import * as config from './../config.js'
+import { breakpoints } from '../config.json'
 
 type Props = DetailedHTMLProps<
   ImgHTMLAttributes<HTMLImageElement>,
@@ -45,8 +45,9 @@ export const Picture = ({ src, ...props }: Props) => {
   const extension = getImageExtension(src)
 
   const renderSources = () => {
-    const webpImages = config.breakpoints.map(({ maxWidth, resizeTo }: Breakpoint) => (
+    const webpImages = breakpoints.map(({ maxWidth, resizeTo }: Breakpoint) => (
       <source
+        key={`${maxWidth}${resizeTo}`}
         srcSet={`${imageWithoutExtension}@${resizeTo / 100}x.webp`}
         media={`(max-width: ${maxWidth}px)`}
         type="image/webp"
@@ -55,9 +56,10 @@ export const Picture = ({ src, ...props }: Props) => {
     webpImages.push(
       <source srcSet={`${imageWithoutExtension}.webp`} type="image/webp" />
     )
-    const regularImages = config.breakpoints.map(
+    const regularImages = breakpoints.map(
       ({ maxWidth, resizeTo }: Breakpoint) => (
         <source
+          key={`${maxWidth}${resizeTo}`}
           srcSet={`${imageWithoutExtension}@${resizeTo / 100}x.${extension}`}
           media={`(max-width: ${maxWidth}px)`}
           type={getImageType(src)}
