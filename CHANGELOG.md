@@ -1,3 +1,12 @@
+# [1.2.0](https://github.com/MarceloDJunior/react-optimized-images/compare/v1.1.1...v1.2.0) (2022-05-29)
+
+
+### Features
+
+* add different size images for better performance on mobile ([51fd933](https://github.com/MarceloDJunior/react-optimized-images/commit/51fd933cae1c7ec9523fedb047f41d406daef7ba))
+
+
+
 ## 1.1.1 (2022-05-25)
 
 
