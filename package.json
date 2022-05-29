@@ -3,6 +3,7 @@
   "description": "A light package to optimize images for React!",
   "version": "1.2.0",
   "author": "Marcelo Dornelles Junior",
+  "module": "dist/index.js",
   "license": "MIT",
   "keywords": [
     "webp",
@@ -17,13 +18,13 @@
     "start": "rollup -c -w"
   },
   "bin": {
-    "convert-images": "scripts/convert-images.mjs"
+    "convert-images": "scripts/convert-images.js"
   },
   "files": [
-    "dist"
+    "dist",
+    "scripts",
+    "config.js"
   ],
-  "main": "dist/csj/index.js",
-  "module": "dist/esm/index.js",
   "types": "dist/index.d.ts",
   "dependencies": {
     "node-find-folder": "^0.1.32",
@@ -31,7 +32,6 @@
     "tiny-glob": "^0.2.9"
   },
   "devDependencies": {
-    "@rollup/plugin-commonjs": "^22.0.0",
     "@rollup/plugin-node-resolve": "^13.3.0",
     "@rollup/plugin-typescript": "^8.3.2",
     "@types/react": "^18.0.9",

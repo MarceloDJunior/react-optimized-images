@@ -1,11 +1,10 @@
 #! /usr/bin/env node
-import ff from 'node-find-folder'
-import glob from 'tiny-glob'
-import sharp from 'sharp'
-import config from '../config.js'
+const ff = require('node-find-folder')
+const glob = require('tiny-glob')
+const sharp = require('sharp')
+const { breakpoints, minWidth } = require('../config.js')
 
 let buildFolderName = 'build'
-const { breakpoints, minWidth } = config
 
 init()
 
