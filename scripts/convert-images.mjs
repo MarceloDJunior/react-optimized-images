@@ -2,36 +2,83 @@
 import ff from 'node-find-folder'
 import glob from 'tiny-glob'
 import sharp from 'sharp'
+import config from '../config.js'
 
-const buildFolderIndex = process.argv.indexOf('--build-folder')
 let buildFolderName = 'build'
+const { breakpoints, minWidth } = config
 
-if (buildFolderIndex > -1) {
-  buildFolderName = process.argv[buildFolderIndex + 1]
+init()
+
+async function init() {
+  try {
+    await populateOptions()
+    const buildFolder = getBuildFolder()
+    const files = await glob(buildFolder + '/**/*.{jpg,png}')
+    files.forEach(async (file) => {
+      await generateImages(file)
+    })
+    console.info('Images optimized successfully!')
+  } catch (e) {
+    console.error(e)
+  }
 }
 
-const getBuildFolder = () => {
+async function populateOptions() {
+  try {
+    const buildFolderIndex = process.argv.indexOf('--build-folder')
+    if (buildFolderIndex > -1) {
+      buildFolderName = process.argv[buildFolderIndex + 1]
+    }
+  } catch (e) {}
+}
+
+function getBuildFolder() {
   const buildFolder = new ff(buildFolderName)[0]
   return buildFolder
 }
 
-const generateWebp = (file) => {
-  const fileWithWebExtension = file.substr(0, file.lastIndexOf('.')) + `.webp`
-  sharp(file).webp().toFile(fileWithWebExtension)
+async function generateImages(file) {
+  const image = sharp(file)
+  const { width, height } = await image.metadata()
+  generateRegularImages(file, width, height)
+  generateWebpImages(file, width, height)
 }
 
-try {
-  const buildFolder = getBuildFolder()
-  glob(buildFolder + '/**/*.{jpg,png}')
-    .then((files) => {
-      files.forEach((file) => {
-        generateWebp(file)
-      })
-      console.log('Images converted to webp successfully!')
-    })
-    .catch((e) => {
-      console.error(e)
-    })
-} catch (e) {
-  console.error(e)
+function generateRegularImages(file, width, height) {
+  const fileWithoutExtension = file.substr(0, file.lastIndexOf('.'))
+  const fileExtension = file.substr(file.lastIndexOf('.') + 1)
+  breakpoints.forEach(({ resizeTo }) => {
+    const percentOfImage = resizeTo / 100
+    const targetWidth = width * percentOfImage
+    const targetHeight = height * percentOfImage
+    const img = sharp(file).resize(
+      Math.floor(targetWidth >= minWidth ? targetWidth : width),
+      Math.floor(targetWidth >= minWidth ? targetHeight : height)
+    )
+    if (isPng(file)) {
+      img.png({ quality: 80, palette: true })
+    } else {
+      img.jpeg({ quality: 80 })
+    }
+    img.toFile(`${fileWithoutExtension}@${percentOfImage}x.${fileExtension}`)
+  })
 }
+
+function generateWebpImages(file, width, height) {
+  const fileWithoutExtension = file.substr(0, file.lastIndexOf('.'))
+  sharp(file).webp().toFile(`${fileWithoutExtension}.webp`)
+  breakpoints.forEach(({ resizeTo }) => {
+    const percentOfImage = resizeTo / 100
+    const targetWidth = width * percentOfImage
+    const targetHeight = height * percentOfImage
+    const img = sharp(file)
+      .resize(
+        Math.floor(targetWidth >= minWidth ? targetWidth : width),
+        Math.floor(targetWidth >= minWidth ? targetHeight : height)
+      )
+      .webp({ quality: 80 })
+    img.toFile(`${fileWithoutExtension}@${percentOfImage}x.webp`)
+  })
+}
+
+const isPng = (fileName) => fileName.toLowerCase().endsWith('png')

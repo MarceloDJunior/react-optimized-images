@@ -1,15 +1,14 @@
 {
   "compilerOptions": {
     // Default
-    "target": "es5", 
-    "esModuleInterop": true, 
+    "target": "es5",
+    "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "strict": true, 
+    "strict": true,
     "skipLibCheck": true,
-
     // Added
-    "jsx": "react", 
-    "module": "ESNext",  
+    "jsx": "react",
+    "module": "ESNext",
     "declaration": true,
     "declarationDir": "types",
     "sourceMap": true,
@@ -17,6 +16,8 @@
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
     "emitDeclarationOnly": true,
+    "allowJs": true,
+    "rootDir": "."
   },
   "include": [
     "src"
