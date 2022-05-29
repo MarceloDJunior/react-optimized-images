@@ -38,20 +38,16 @@ function __rest(s, e) {
     return t;
 }
 
-const breakpoints$1 = [
-  {
-    maxWidth: 576,
-    resizeTo: 50,
-  },
-  {
-    maxWidth: 992,
-    resizeTo: 70,
-  },
+var breakpoints = [
+	{
+		maxWidth: 576,
+		resizeTo: 50
+	},
+	{
+		maxWidth: 992,
+		resizeTo: 70
+	}
 ];
-
-const minWidth = 200;
-
-var config = { breakpoints: breakpoints$1, minWidth };
 
 var getImageWithoutExtension = function (fileName) {
     return fileName.substr(0, fileName.lastIndexOf('.'));
@@ -66,7 +62,6 @@ var getImageType = function (fileName) {
 var getImageExtension = function (fileName) {
     return fileName.substr(fileName.lastIndexOf('.') + 1).toLowerCase();
 };
-var breakpoints = config.breakpoints;
 var Picture = function (_a) {
     var src = _a.src, props = __rest(_a, ["src"]);
     var _b = useState(false), hasError = _b[0], setHasError = _b[1];
@@ -80,12 +75,12 @@ var Picture = function (_a) {
     var renderSources = function () {
         var webpImages = breakpoints.map(function (_a) {
             var maxWidth = _a.maxWidth, resizeTo = _a.resizeTo;
-            return (React.createElement("source", { srcSet: "".concat(imageWithoutExtension, "@").concat(resizeTo / 100, "x.webp"), media: "(max-width: ".concat(maxWidth, "px)"), type: "image/webp" }));
+            return (React.createElement("source", { key: "".concat(maxWidth).concat(resizeTo), srcSet: "".concat(imageWithoutExtension, "@").concat(resizeTo / 100, "x.webp"), media: "(max-width: ".concat(maxWidth, "px)"), type: "image/webp" }));
         });
         webpImages.push(React.createElement("source", { srcSet: "".concat(imageWithoutExtension, ".webp"), type: "image/webp" }));
         var regularImages = breakpoints.map(function (_a) {
             var maxWidth = _a.maxWidth, resizeTo = _a.resizeTo;
-            return (React.createElement("source", { srcSet: "".concat(imageWithoutExtension, "@").concat(resizeTo / 100, "x.").concat(extension), media: "(max-width: ".concat(maxWidth, "px)"), type: getImageType(src) }));
+            return (React.createElement("source", { key: "".concat(maxWidth).concat(resizeTo), srcSet: "".concat(imageWithoutExtension, "@").concat(resizeTo / 100, "x.").concat(extension), media: "(max-width: ".concat(maxWidth, "px)"), type: getImageType(src) }));
         });
         return (React.createElement(React.Fragment, null,
             webpImages,
