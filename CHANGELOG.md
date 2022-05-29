@@ -1,3 +1,12 @@
+## [1.2.2](https://github.com/MarceloDJunior/react-optimized-images/compare/v1.2.1...v1.2.2) (2022-05-29)
+
+
+### Bug Fixes
+
+* add className to picture component to avoid wrong style render ([c928054](https://github.com/MarceloDJunior/react-optimized-images/commit/c928054290ff274bb8f29d34c67a57928d51edee))
+
+
+
 ## [1.2.1](https://github.com/MarceloDJunior/react-optimized-images/compare/v1.2.0...v1.2.1) (2022-05-29)
 
 
