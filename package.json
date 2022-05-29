@@ -9,8 +9,10 @@
     "webp",
     "react",
     "images",
+    "image",
     "component",
-    "optimize"
+    "optimize",
+    "next"
   ],
   "homepage": "https://github.com/MarceloDJunior/react-optimized-images#README",
   "scripts": {
