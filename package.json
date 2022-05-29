@@ -1,7 +1,7 @@
 {
   "name": "react-optimized-images",
   "description": "A light package to optimize images for React!",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "author": "Marcelo Dornelles Junior",
   "module": "dist/index.js",
   "license": "MIT",
