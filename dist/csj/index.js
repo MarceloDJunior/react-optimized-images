@@ -46,28 +46,62 @@ function __rest(s, e) {
     return t;
 }
 
-var replaceExtension = function (fileName, targetExtension) {
-    return fileName.substr(0, fileName.lastIndexOf('.')) + ".".concat(targetExtension);
+const breakpoints$1 = [
+  {
+    maxWidth: 576,
+    resizeTo: 50,
+  },
+  {
+    maxWidth: 992,
+    resizeTo: 70,
+  },
+];
+
+const minWidth = 200;
+
+var config = { breakpoints: breakpoints$1, minWidth };
+
+var getImageWithoutExtension = function (fileName) {
+    return fileName.substr(0, fileName.lastIndexOf('.'));
 };
-var getImageExtension = function (fileName) {
+var getImageType = function (fileName) {
     if (fileName.toLowerCase().endsWith('jpg') ||
         fileName.toLowerCase().endsWith('jpeg')) {
-        return 'jpeg';
+        return 'image/jpeg';
     }
+    return "image/".concat(fileName.substr(fileName.lastIndexOf('.') + 1).toLowerCase());
+};
+var getImageExtension = function (fileName) {
     return fileName.substr(fileName.lastIndexOf('.') + 1).toLowerCase();
 };
+var breakpoints = config.breakpoints;
 var Picture = function (_a) {
     var src = _a.src, props = __rest(_a, ["src"]);
     var _b = React.useState(false), hasError = _b[0], setHasError = _b[1];
-    var webpSrc = replaceExtension(src, 'webp');
     var handleError = function () {
         if (!hasError) {
             setHasError(true);
         }
     };
+    var imageWithoutExtension = getImageWithoutExtension(src);
+    var extension = getImageExtension(src);
+    var renderSources = function () {
+        var webpImages = breakpoints.map(function (_a) {
+            var maxWidth = _a.maxWidth, resizeTo = _a.resizeTo;
+            return (React__default["default"].createElement("source", { srcSet: "".concat(imageWithoutExtension, "@").concat(resizeTo / 100, "x.webp"), media: "(max-width: ".concat(maxWidth, "px)"), type: "image/webp" }));
+        });
+        webpImages.push(React__default["default"].createElement("source", { srcSet: "".concat(imageWithoutExtension, ".webp"), type: "image/webp" }));
+        var regularImages = breakpoints.map(function (_a) {
+            var maxWidth = _a.maxWidth, resizeTo = _a.resizeTo;
+            return (React__default["default"].createElement("source", { srcSet: "".concat(imageWithoutExtension, "@").concat(resizeTo / 100, "x.").concat(extension), media: "(max-width: ".concat(maxWidth, "px)"), type: getImageType(src) }));
+        });
+        return (React__default["default"].createElement(React__default["default"].Fragment, null,
+            webpImages,
+            regularImages));
+    };
     return (React__default["default"].createElement("picture", null,
-        !hasError && React__default["default"].createElement("source", { srcSet: webpSrc, type: "image/webp" }),
-        React__default["default"].createElement("source", { srcSet: src, type: "image/".concat(getImageExtension(src)) }),
+        !hasError && renderSources(),
+        React__default["default"].createElement("source", { srcSet: src, type: "image/".concat(extension) }),
         React__default["default"].createElement("img", __assign({ src: src }, props, { onError: handleError }))));
 };
 

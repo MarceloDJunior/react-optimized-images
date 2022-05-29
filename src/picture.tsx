@@ -1,5 +1,7 @@
 import React, { DetailedHTMLProps, ImgHTMLAttributes, useState } from 'react'
 
+import config from './../config.js'
+
 type Props = DetailedHTMLProps<
   ImgHTMLAttributes<HTMLImageElement>,
   HTMLImageElement
@@ -7,23 +9,33 @@ type Props = DetailedHTMLProps<
   src: string
 }
 
-const replaceExtension = (fileName: string, targetExtension: string) => {
-  return fileName.substr(0, fileName.lastIndexOf('.')) + `.${targetExtension}`
+type Breakpoint = {
+  maxWidth: number
+  resizeTo: number
 }
 
-const getImageExtension = (fileName: string): string => {
+const getImageWithoutExtension = (fileName: string): string => {
+  return fileName.substr(0, fileName.lastIndexOf('.'))
+}
+
+const getImageType = (fileName: string): string => {
   if (
     fileName.toLowerCase().endsWith('jpg') ||
     fileName.toLowerCase().endsWith('jpeg')
   ) {
-    return 'jpeg'
+    return 'image/jpeg'
   }
+  return `image/${fileName.substr(fileName.lastIndexOf('.') + 1).toLowerCase()}`
+}
+
+const getImageExtension = (fileName: string): string => {
   return fileName.substr(fileName.lastIndexOf('.') + 1).toLowerCase()
 }
 
+const { breakpoints, minWidth } = config
+
 export const Picture = ({ src, ...props }: Props) => {
   const [hasError, setHasError] = useState(false)
-  const webpSrc = replaceExtension(src, 'webp')
 
   const handleError = () => {
     if (!hasError) {
@@ -31,10 +43,41 @@ export const Picture = ({ src, ...props }: Props) => {
     }
   }
 
+  const imageWithoutExtension = getImageWithoutExtension(src)
+  const extension = getImageExtension(src)
+
+  const renderSources = () => {
+    const webpImages = breakpoints.map(({ maxWidth, resizeTo }: Breakpoint) => (
+      <source
+        srcSet={`${imageWithoutExtension}@${resizeTo / 100}x.webp`}
+        media={`(max-width: ${maxWidth}px)`}
+        type="image/webp"
+      />
+    ))
+    webpImages.push(
+      <source srcSet={`${imageWithoutExtension}.webp`} type="image/webp" />
+    )
+    const regularImages = breakpoints.map(
+      ({ maxWidth, resizeTo }: Breakpoint) => (
+        <source
+          srcSet={`${imageWithoutExtension}@${resizeTo / 100}x.${extension}`}
+          media={`(max-width: ${maxWidth}px)`}
+          type={getImageType(src)}
+        />
+      )
+    )
+    return (
+      <>
+        {webpImages}
+        {regularImages}
+      </>
+    )
+  }
+
   return (
     <picture>
-      {!hasError && <source srcSet={webpSrc} type="image/webp" />}
-      <source srcSet={src} type={`image/${getImageExtension(src)}`} />
+      {!hasError && renderSources()}
+      <source srcSet={src} type={`image/${extension}`} />
       <img src={src} {...props} onError={handleError} />
     </picture>
   )

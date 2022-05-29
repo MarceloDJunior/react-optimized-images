@@ -1,6 +1,6 @@
 # react-optimized-images
 
-A light package to generate and use webp images, keeping old browsers support.
+A light package to optimize images for React! It generates and uses webp images with fallback to other formats, keeping great performance on modern browsers and still supporting old browsers.
 
 NOTE: There is an issue using with Next.js in dev mode, see the workaround [here](#nextjs-issue).
 
@@ -59,7 +59,7 @@ Example with Next.js:
 
 ### Picture component
 
-For an easier use of the generated images, you can use the `Picture` component, a wrapper for html `<picture>` tag. It looks for the generated webp image, based on the `src` property, and uses the default `src` as a fallback for older browsers, providing browsers full support.
+For an easier use of the generated images, you can use the `Picture` component, a wrapper for html `<picture>` tag. It looks for the generated webp image, based on the `src` property, and uses the default `src` as a fallback for older browsers, providing full support to all browsers.
 
 #### Usage
 
@@ -84,7 +84,11 @@ The output will be like
 
 ```html
 <picture>
+  <source srcset="/coffee@0.5x.webp" media="(max-width: 576px)" type="image/webp">
+  <source srcset="/coffee@0.7x.webp" media="(max-width: 992px)" type="image/webp">
   <source srcset="/coffee.webp" type="image/webp" />
+  <source srcset="/coffee@0.5x.jpeg" media="(max-width: 576px)" type="image/jpeg">
+  <source srcset="/coffee@0.7x.jpeg" media="(max-width: 992px)" type="image/jpeg">
   <source srcset="/coffee.jpg" type="image/jpeg" />
   <img src="/coffee.jpg" />
 </picture>
