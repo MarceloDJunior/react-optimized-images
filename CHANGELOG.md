@@ -1,3 +1,12 @@
+## [1.2.1](https://github.com/MarceloDJunior/react-optimized-images/compare/v1.2.0...v1.2.1) (2022-05-29)
+
+
+### Performance Improvements
+
+* support only esm components to create a lighter bundle but keep script as cjs ([ca1dfa2](https://github.com/MarceloDJunior/react-optimized-images/commit/ca1dfa2be7803f4696e1d444bd452da4a741d2c9))
+
+
+
 # [1.2.0](https://github.com/MarceloDJunior/react-optimized-images/compare/v1.1.1...v1.2.0) (2022-05-29)
 
 
