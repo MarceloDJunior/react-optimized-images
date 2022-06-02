@@ -1,6 +1,6 @@
 import React, { DetailedHTMLProps, ImgHTMLAttributes, useState } from 'react'
 
-import { breakpoints } from '../config.json'
+import { breakpoints } from 'react-optimized-images/config'
 
 type Props = DetailedHTMLProps<
   ImgHTMLAttributes<HTMLImageElement>,
@@ -15,7 +15,7 @@ type Breakpoint = {
 }
 
 const getImageWithoutExtension = (fileName: string): string => {
-  return fileName.substr(0, fileName.lastIndexOf('.'))
+  return fileName.substring(0, fileName.lastIndexOf('.'))
 }
 
 const getImageType = (fileName: string): string => {
@@ -25,11 +25,13 @@ const getImageType = (fileName: string): string => {
   ) {
     return 'image/jpeg'
   }
-  return `image/${fileName.substr(fileName.lastIndexOf('.') + 1).toLowerCase()}`
+  return `image/${fileName
+    .substring(fileName.lastIndexOf('.') + 1)
+    .toLowerCase()}`
 }
 
 const getImageExtension = (fileName: string): string => {
-  return fileName.substr(fileName.lastIndexOf('.') + 1).toLowerCase()
+  return fileName.substring(fileName.lastIndexOf('.') + 1).toLowerCase()
 }
 
 export const Picture = ({ src, className, ...props }: Props) => {
@@ -47,7 +49,7 @@ export const Picture = ({ src, className, ...props }: Props) => {
   const renderSources = () => {
     const webpImages = breakpoints.map(({ maxWidth, resizeTo }: Breakpoint) => (
       <source
-        key={`${maxWidth}${resizeTo}`}
+        key={`${maxWidth}${resizeTo}webp`}
         srcSet={`${imageWithoutExtension}@${resizeTo / 100}x.webp`}
         media={`(max-width: ${maxWidth}px)`}
         type="image/webp"
@@ -59,7 +61,7 @@ export const Picture = ({ src, className, ...props }: Props) => {
     const regularImages = breakpoints.map(
       ({ maxWidth, resizeTo }: Breakpoint) => (
         <source
-          key={`${maxWidth}${resizeTo}`}
+          key={`${maxWidth}${resizeTo}${extension}`}
           srcSet={`${imageWithoutExtension}@${resizeTo / 100}x.${extension}`}
           media={`(max-width: ${maxWidth}px)`}
           type={getImageType(src)}

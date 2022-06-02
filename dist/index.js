@@ -1,4 +1,13 @@
-import React, { useState } from 'react';
+'use strict';
+
+Object.defineProperty(exports, '__esModule', { value: true });
+
+var React = require('react');
+var config = require('react-optimized-images/config');
+
+function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
+
+var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
 
 /******************************************************************************
 Copyright (c) Microsoft Corporation.
@@ -38,33 +47,24 @@ function __rest(s, e) {
     return t;
 }
 
-var breakpoints = [
-	{
-		maxWidth: 576,
-		resizeTo: 50
-	},
-	{
-		maxWidth: 992,
-		resizeTo: 70
-	}
-];
-
 var getImageWithoutExtension = function (fileName) {
-    return fileName.substr(0, fileName.lastIndexOf('.'));
+    return fileName.substring(0, fileName.lastIndexOf('.'));
 };
 var getImageType = function (fileName) {
     if (fileName.toLowerCase().endsWith('jpg') ||
         fileName.toLowerCase().endsWith('jpeg')) {
         return 'image/jpeg';
     }
-    return "image/".concat(fileName.substr(fileName.lastIndexOf('.') + 1).toLowerCase());
+    return "image/".concat(fileName
+        .substring(fileName.lastIndexOf('.') + 1)
+        .toLowerCase());
 };
 var getImageExtension = function (fileName) {
-    return fileName.substr(fileName.lastIndexOf('.') + 1).toLowerCase();
+    return fileName.substring(fileName.lastIndexOf('.') + 1).toLowerCase();
 };
 var Picture = function (_a) {
     var src = _a.src, className = _a.className, props = __rest(_a, ["src", "className"]);
-    var _b = useState(false), hasError = _b[0], setHasError = _b[1];
+    var _b = React.useState(false), hasError = _b[0], setHasError = _b[1];
     var handleError = function () {
         if (!hasError) {
             setHasError(true);
@@ -73,24 +73,24 @@ var Picture = function (_a) {
     var imageWithoutExtension = getImageWithoutExtension(src);
     var extension = getImageExtension(src);
     var renderSources = function () {
-        var webpImages = breakpoints.map(function (_a) {
+        var webpImages = config.breakpoints.map(function (_a) {
             var maxWidth = _a.maxWidth, resizeTo = _a.resizeTo;
-            return (React.createElement("source", { key: "".concat(maxWidth).concat(resizeTo), srcSet: "".concat(imageWithoutExtension, "@").concat(resizeTo / 100, "x.webp"), media: "(max-width: ".concat(maxWidth, "px)"), type: "image/webp" }));
+            return (React__default["default"].createElement("source", { key: "".concat(maxWidth).concat(resizeTo, "webp"), srcSet: "".concat(imageWithoutExtension, "@").concat(resizeTo / 100, "x.webp"), media: "(max-width: ".concat(maxWidth, "px)"), type: "image/webp" }));
         });
-        webpImages.push(React.createElement("source", { srcSet: "".concat(imageWithoutExtension, ".webp"), type: "image/webp" }));
-        var regularImages = breakpoints.map(function (_a) {
+        webpImages.push(React__default["default"].createElement("source", { srcSet: "".concat(imageWithoutExtension, ".webp"), type: "image/webp" }));
+        var regularImages = config.breakpoints.map(function (_a) {
             var maxWidth = _a.maxWidth, resizeTo = _a.resizeTo;
-            return (React.createElement("source", { key: "".concat(maxWidth).concat(resizeTo), srcSet: "".concat(imageWithoutExtension, "@").concat(resizeTo / 100, "x.").concat(extension), media: "(max-width: ".concat(maxWidth, "px)"), type: getImageType(src) }));
+            return (React__default["default"].createElement("source", { key: "".concat(maxWidth).concat(resizeTo).concat(extension), srcSet: "".concat(imageWithoutExtension, "@").concat(resizeTo / 100, "x.").concat(extension), media: "(max-width: ".concat(maxWidth, "px)"), type: getImageType(src) }));
         });
-        return (React.createElement(React.Fragment, null,
+        return (React__default["default"].createElement(React__default["default"].Fragment, null,
             webpImages,
             regularImages));
     };
-    return (React.createElement("picture", { className: className },
+    return (React__default["default"].createElement("picture", { className: className },
         !hasError && renderSources(),
-        React.createElement("source", { srcSet: src, type: "image/".concat(extension) }),
-        React.createElement("img", __assign({ src: src, className: className }, props, { onError: handleError }))));
+        React__default["default"].createElement("source", { srcSet: src, type: "image/".concat(extension) }),
+        React__default["default"].createElement("img", __assign({ src: src, className: className }, props, { onError: handleError }))));
 };
 
-export { Picture };
+exports.Picture = Picture;
 //# sourceMappingURL=index.js.map
