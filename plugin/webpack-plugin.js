@@ -5,7 +5,7 @@ const generateImages = require('./generate-images.js')
 const NEW_CONFIG_OUTPUT = './node_modules/react-optimized-images/config.json'
 
 const FONT_COLORS = {
-  BLUE: '\x1b[36m%s\x1b[0m',
+  BLUE: '\x1b[36m',
   DEFAULT: '\x1b[0m',
   GREEN: '\x1b[32m',
 }
@@ -22,6 +22,7 @@ const defaultConfig = {
       resizeTo: 70,
     },
   ],
+  enabled: true,
 }
 
 class OptimizedImagesPlugin {
@@ -29,43 +30,45 @@ class OptimizedImagesPlugin {
 
   constructor(options) {
     const customOptions = {
-      minWidth: options?.minWidth || defaultConfig.minWidth,
-      breakpoints: options?.breakpoints || defaultConfig.breakpoints,
+      minWidth: options?.minWidth ?? defaultConfig.minWidth,
+      breakpoints: options?.breakpoints ?? defaultConfig.breakpoints,
+      enabled: options?.enabled ?? defaultConfig.enabled,
     }
     this.options = customOptions
   }
 
   apply(compiler) {
-    compiler.hooks.environment.tap('OptimizedImagesPlugin', () => {
-      this.applyCustomConfig()
-    })
+    if (this.options.enabled) {
+      compiler.hooks.environment.tap('OptimizedImagesPlugin', () => {
+        this.applyCustomConfig()
+      })
 
-    compiler.hooks.assetEmitted.tap(
-      'OptimizedImagesPlugin',
-      (_, { targetPath }) => {
-        const extension = this.getExtension(targetPath)
-        if (['jpg', 'jpeg', 'png'].includes(extension)) {
-          generateImages(targetPath, this.options).then(() => {
-            const fileName = targetPath.substring(
-              targetPath.lastIndexOf('/') + 1
-            )
-            console.log(
-              FONT_COLORS.BLUE,
-              'info',
-              `${FONT_COLORS.DEFAULT} - ${fileName} ${FONT_COLORS.GREEN}optimized ✔`
-            )
-          })
+      compiler.hooks.assetEmitted.tap(
+        'OptimizedImagesPlugin',
+        (_, { targetPath }) => {
+          const extension = this.getExtension(targetPath)
+          if (['jpg', 'jpeg', 'png'].includes(extension)) {
+            generateImages(targetPath, this.options).then(() => {
+              const fileName = targetPath.substring(
+                targetPath.lastIndexOf('/') + 1
+              )
+              console.log(
+                `${FONT_COLORS.BLUE}image${FONT_COLORS.DEFAULT} - ${fileName} ${FONT_COLORS.GREEN}optimized ✔`
+              )
+            })
+          }
         }
-      }
-    )
+      )
+    }
   }
 
   applyCustomConfig() {
-    const { minWidth, breakpoints } = this.options
+    const { minWidth, breakpoints, enabled } = this.options
     const newJsonConfig = JSON.stringify(
       {
         minWidth,
         breakpoints,
+        enabled,
       },
       null,
       2

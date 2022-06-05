@@ -77,7 +77,7 @@ var Picture = function (_a) {
             var maxWidth = _a.maxWidth, resizeTo = _a.resizeTo;
             return (React__default["default"].createElement("source", { key: "".concat(maxWidth).concat(resizeTo, "webp"), srcSet: "".concat(imageWithoutExtension, "@").concat(resizeTo / 100, "x.webp"), media: "(max-width: ".concat(maxWidth, "px)"), type: "image/webp" }));
         });
-        webpImages.push(React__default["default"].createElement("source", { srcSet: "".concat(imageWithoutExtension, ".webp"), type: "image/webp" }));
+        webpImages.push(React__default["default"].createElement("source", { key: "".concat(imageWithoutExtension, "webp"), srcSet: "".concat(imageWithoutExtension, ".webp"), type: "image/webp" }));
         var regularImages = config.breakpoints.map(function (_a) {
             var maxWidth = _a.maxWidth, resizeTo = _a.resizeTo;
             return (React__default["default"].createElement("source", { key: "".concat(maxWidth).concat(resizeTo).concat(extension), srcSet: "".concat(imageWithoutExtension, "@").concat(resizeTo / 100, "x.").concat(extension), media: "(max-width: ".concat(maxWidth, "px)"), type: getImageType(src) }));
@@ -86,10 +86,13 @@ var Picture = function (_a) {
             webpImages,
             regularImages));
     };
-    return (React__default["default"].createElement("picture", { className: className },
-        !hasError && renderSources(),
-        React__default["default"].createElement("source", { srcSet: src, type: "image/".concat(extension) }),
-        React__default["default"].createElement("img", __assign({ src: src, className: className }, props, { onError: handleError }))));
+    if (config.enabled) {
+        return (React__default["default"].createElement("picture", { className: className },
+            !hasError && renderSources(),
+            React__default["default"].createElement("source", { srcSet: src, type: "image/".concat(extension) }),
+            React__default["default"].createElement("img", __assign({ src: src, className: className }, props, { onError: handleError }))));
+    }
+    return React__default["default"].createElement("img", __assign({ src: src, className: className }, props));
 };
 
 exports.Picture = Picture;

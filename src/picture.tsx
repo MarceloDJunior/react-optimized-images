@@ -1,6 +1,6 @@
 import React, { DetailedHTMLProps, ImgHTMLAttributes, useState } from 'react'
 
-import { breakpoints } from 'react-optimized-images/config'
+import { breakpoints, enabled } from 'react-optimized-images/config'
 
 type Props = DetailedHTMLProps<
   ImgHTMLAttributes<HTMLImageElement>,
@@ -56,7 +56,11 @@ export const Picture = ({ src, className, ...props }: Props) => {
       />
     ))
     webpImages.push(
-      <source srcSet={`${imageWithoutExtension}.webp`} type="image/webp" />
+      <source
+        key={`${imageWithoutExtension}webp`}
+        srcSet={`${imageWithoutExtension}.webp`}
+        type="image/webp"
+      />
     )
     const regularImages = breakpoints.map(
       ({ maxWidth, resizeTo }: Breakpoint) => (
@@ -76,13 +80,16 @@ export const Picture = ({ src, className, ...props }: Props) => {
     )
   }
 
-  return (
-    <picture className={className}>
-      {!hasError && renderSources()}
-      <source srcSet={src} type={`image/${extension}`} />
-      <img src={src} className={className} {...props} onError={handleError} />
-    </picture>
-  )
+  if (enabled) {
+    return (
+      <picture className={className}>
+        {!hasError && renderSources()}
+        <source srcSet={src} type={`image/${extension}`} />
+        <img src={src} className={className} {...props} onError={handleError} />
+      </picture>
+    )
+  }
+  return <img src={src} className={className} {...props} />
 }
 
 export default Picture

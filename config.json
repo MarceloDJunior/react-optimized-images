@@ -9,5 +9,6 @@
       "resizeTo": 70
     }
   ],
-  "minWidth": 200
+  "minWidth": 200,
+  "enabled": true
 }
