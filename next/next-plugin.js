@@ -1,4 +1,4 @@
-const OptimizedImagesPlugin = require('../plugin/webpack-plugin.js')
+const OptimizedImagesPlugin = require(`${__dirname}/../plugin/webpack-plugin.js`)
 
 module.exports = (nextConfig = {}) => {
   return Object.assign({}, nextConfig, {

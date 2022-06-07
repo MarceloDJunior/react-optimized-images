@@ -1,8 +1,8 @@
 const fs = require('fs')
 
-const generateImages = require('./generate-images.js')
+const generateImages = require(`${__dirname}/generate-images.js`)
 
-const NEW_CONFIG_OUTPUT = './node_modules/react-optimized-images/config.json'
+const NEW_CONFIG_OUTPUT = `${__dirname}/../config.json`
 
 const FONT_COLORS = {
   BLUE: '\x1b[36m',
