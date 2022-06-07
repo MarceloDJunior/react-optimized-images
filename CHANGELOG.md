@@ -1,3 +1,24 @@
+# [2.0.0](https://github.com/MarceloDJunior/react-optimized-images/compare/v1.2.2...v2.0.0) (2022-06-07)
+
+
+### Bug Fixes
+
+* add exports to enable jest mocks ([1a6dfe6](https://github.com/MarceloDJunior/react-optimized-images/commit/1a6dfe65dcd92a0cd29f2b66d33853470488b6e9))
+
+
+### Features
+
+* add enabled option ([479f340](https://github.com/MarceloDJunior/react-optimized-images/commit/479f3406b6757b5c9169ad326e7543aa548168cd))
+* add images generation with custom configuration at build time ([cefb9d0](https://github.com/MarceloDJunior/react-optimized-images/commit/cefb9d0c4d806ff7984a3f9c6fe895828ed567b2))
+* add Next.js plugin ([db657b7](https://github.com/MarceloDJunior/react-optimized-images/commit/db657b75695afda24a64db1707cbef61c6f67b5b))
+
+
+### BREAKING CHANGES
+
+* `convert-images` script is no longer supported. Please add `react-optimized-images/plugin` in your webpack config to generate optimized images. Instructions are available in the README.
+
+
+
 ## [1.2.2](https://github.com/MarceloDJunior/react-optimized-images/compare/v1.2.1...v1.2.2) (2022-05-29)
 
 
