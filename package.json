@@ -27,9 +27,9 @@
   },
   "files": [
     "dist",
-    "plugins",
-    "config.json",
-    "index.d.ts"
+    "plugin",
+    "next",
+    "config.json"
   ],
   "types": "dist/index.d.ts",
   "dependencies": {
