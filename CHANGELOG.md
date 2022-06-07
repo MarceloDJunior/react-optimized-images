@@ -1,3 +1,12 @@
+## [2.0.1](https://github.com/MarceloDJunior/react-optimized-images/compare/v2.0.0...v2.0.1) (2022-06-07)
+
+
+### Bug Fixes
+
+* update npm version over unpublished one ([736f3cd](https://github.com/MarceloDJunior/react-optimized-images/commit/736f3cd41725bb0554340f79b467c4cfb9d0716c))
+
+
+
 # [2.0.0](https://github.com/MarceloDJunior/react-optimized-images/compare/v1.2.2...v2.0.0) (2022-06-07)
 
 
