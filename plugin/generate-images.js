@@ -6,8 +6,27 @@ async function generateImages(file, customOptions) {
   options = customOptions
   const image = sharp(file)
   const { width, height } = await image.metadata()
+  generatePreview(file, width, height)
   generateRegularImages(file, width, height)
   generateWebpImages(file, width, height)
+}
+
+function generatePreview(file, width, height) {
+  const fileWithoutExtension = file.substr(0, file.lastIndexOf('.'))
+  const ratio = width / height
+  let newWidth = 0
+  let newHeight = 0
+  if (ratio > 1) {
+    newWidth = 50
+    newHeight = newWidth / ratio
+  } else {
+    newHeight = 50
+    newWidth = newHeight * ratio
+  }
+  sharp(file)
+    .resize(Math.floor(newWidth), Math.floor(newHeight))
+    .jpeg({ quality: 20 })
+    .toFile(`${fileWithoutExtension}@preview.jpg`)
 }
 
 function generateRegularImages(file, width, height) {

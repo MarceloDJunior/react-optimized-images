@@ -47,6 +47,37 @@ function __rest(s, e) {
     return t;
 }
 
+function styleInject(css, ref) {
+  if ( ref === void 0 ) ref = {};
+  var insertAt = ref.insertAt;
+
+  if (!css || typeof document === 'undefined') { return; }
+
+  var head = document.head || document.getElementsByTagName('head')[0];
+  var style = document.createElement('style');
+  style.type = 'text/css';
+
+  if (insertAt === 'top') {
+    if (head.firstChild) {
+      head.insertBefore(style, head.firstChild);
+    } else {
+      head.appendChild(style);
+    }
+  } else {
+    head.appendChild(style);
+  }
+
+  if (style.styleSheet) {
+    style.styleSheet.cssText = css;
+  } else {
+    style.appendChild(document.createTextNode(css));
+  }
+}
+
+var css_248z = ".picture-module_container__sJKJi {\n  position: relative;\n}\n\n.picture-module_preview__bZVBH {\n  position: absolute;\n  top: 0;\n  left: 0;\n  width: 100%;\n  -webkit-filter: blur(30px);\n  filter: blur(20px);\n  opacity: 1;\n}\n\n.picture-module_preview__bZVBH.picture-module_hidden__EbOnd {\n  opacity: 0;\n  pointer-events: none;\n  transition: opacity 0.3s;\n}\n";
+var styles = {"container":"picture-module_container__sJKJi","preview":"picture-module_preview__bZVBH","hidden":"picture-module_hidden__EbOnd"};
+styleInject(css_248z);
+
 var getImageWithoutExtension = function (fileName) {
     return fileName.substring(0, fileName.lastIndexOf('.'));
 };
@@ -65,9 +96,21 @@ var getImageExtension = function (fileName) {
 var Picture = function (_a) {
     var src = _a.src, className = _a.className, props = __rest(_a, ["src", "className"]);
     var _b = React.useState(false), hasError = _b[0], setHasError = _b[1];
+    var _c = React.useState(false), hasLoaded = _c[0], setHasLoaded = _c[1];
+    var pictureRef = React.useRef(null);
     var handleError = function () {
         if (!hasError) {
             setHasError(true);
+        }
+    };
+    var handleLoad = function () {
+        if (!hasLoaded) {
+            setTimeout(function () {
+                setHasLoaded(true);
+                if (pictureRef.current) {
+                    pictureRef.current.style.maxHeight = '100%';
+                }
+            }, 100);
         }
     };
     var imageWithoutExtension = getImageWithoutExtension(src);
@@ -86,11 +129,25 @@ var Picture = function (_a) {
             webpImages,
             regularImages));
     };
+    React.useEffect(function () {
+        var _a;
+        if ((_a = pictureRef.current) === null || _a === void 0 ? void 0 : _a.complete) {
+            handleLoad();
+        }
+    }, []);
     if (config.enabled) {
-        return (React__default["default"].createElement("picture", { className: className },
-            !hasError && renderSources(),
-            React__default["default"].createElement("source", { srcSet: src, type: "image/".concat(extension) }),
-            React__default["default"].createElement("img", __assign({ src: src, className: className }, props, { onError: handleError }))));
+        return (React__default["default"].createElement("div", { className: styles.container },
+            React__default["default"].createElement("img", __assign({ src: "".concat(imageWithoutExtension, "@preview.jpg"), className: "".concat(className, " ").concat(styles.preview, " ").concat(hasLoaded ? styles.hidden : '') }, props, { style: {
+                    width: props.width || '100%',
+                    height: props.height || 'auto',
+                } })),
+            React__default["default"].createElement("picture", { className: className, style: {
+                    visibility: hasLoaded ? 'visible' : 'hidden',
+                    height: hasLoaded ? undefined : '0',
+                } },
+                !hasError && renderSources(),
+                React__default["default"].createElement("source", { srcSet: src, type: "image/".concat(extension) }),
+                React__default["default"].createElement("img", __assign({ ref: pictureRef, src: src, className: className }, props, { onLoad: handleLoad, onError: handleError, style: __assign(__assign({}, props.style), { maxHeight: '0 !important' }) })))));
     }
     return React__default["default"].createElement("img", __assign({ src: src, className: className }, props));
 };

@@ -1,6 +1,14 @@
-import React, { DetailedHTMLProps, ImgHTMLAttributes, useState } from 'react'
+import React, {
+  DetailedHTMLProps,
+  ImgHTMLAttributes,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 
 import { breakpoints, enabled } from 'react-optimized-images/config'
+
+import styles from './picture.module.css'
 
 type Props = DetailedHTMLProps<
   ImgHTMLAttributes<HTMLImageElement>,
@@ -36,10 +44,23 @@ const getImageExtension = (fileName: string): string => {
 
 export const Picture = ({ src, className, ...props }: Props) => {
   const [hasError, setHasError] = useState(false)
+  const [hasLoaded, setHasLoaded] = useState(false)
+  const pictureRef = useRef<HTMLImageElement>(null)
 
   const handleError = () => {
     if (!hasError) {
       setHasError(true)
+    }
+  }
+
+  const handleLoad = () => {
+    if (!hasLoaded) {
+      setTimeout(() => {
+        setHasLoaded(true)
+        if (pictureRef.current) {
+          pictureRef.current.style.maxHeight = '100%'
+        }
+      }, 100)
     }
   }
 
@@ -80,13 +101,49 @@ export const Picture = ({ src, className, ...props }: Props) => {
     )
   }
 
+  useEffect(() => {
+    if (pictureRef.current?.complete) {
+      handleLoad()
+    }
+  }, [])
+
   if (enabled) {
     return (
-      <picture className={className}>
-        {!hasError && renderSources()}
-        <source srcSet={src} type={`image/${extension}`} />
-        <img src={src} className={className} {...props} onError={handleError} />
-      </picture>
+      <div className={styles.container}>
+        <img
+          src={`${imageWithoutExtension}@preview.jpg`}
+          className={`${className} ${styles.preview} ${
+            hasLoaded ? styles.hidden : ''
+          }`}
+          {...props}
+          style={{
+            width: props.width || '100%',
+            height: props.height || 'auto',
+          }}
+        />
+        <picture
+          className={className}
+          style={{
+            visibility: hasLoaded ? 'visible' : 'hidden',
+            height: hasLoaded ? undefined : '0',
+          }}
+        >
+          {!hasError && renderSources()}
+          <source srcSet={src} type={`image/${extension}`} />
+          <img
+            ref={pictureRef}
+            src={src}
+            className={className}
+            {...props}
+            onLoad={handleLoad}
+            onError={handleError}
+            style={{
+              ...props.style,
+              maxHeight: '0 !important',
+            }}
+          />
+        </picture>
+      </div>
     )
   }
   return <img src={src} className={className} {...props} />

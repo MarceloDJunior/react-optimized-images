@@ -1,0 +1,19 @@
+.container {
+  position: relative;
+}
+
+.preview {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  -webkit-filter: blur(30px);
+  filter: blur(20px);
+  opacity: 1;
+}
+
+.preview.hidden {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
