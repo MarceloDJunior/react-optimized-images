@@ -109,7 +109,13 @@ export const Picture = ({ src, className, ...props }: Props) => {
 
   if (enabled) {
     return (
-      <div className={styles.container}>
+      <div
+        className={styles.container}
+        style={{
+          width: props.width || props.style?.width,
+          height: props.height || props.style?.height,
+        }}
+      >
         <img
           src={`${imageWithoutExtension}@preview.jpg`}
           className={`${className} ${styles.preview} ${
@@ -117,6 +123,7 @@ export const Picture = ({ src, className, ...props }: Props) => {
           }`}
           {...props}
           style={{
+            ...props.style,
             width: props.width || '100%',
             height: props.height || 'auto',
           }}

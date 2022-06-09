@@ -4,9 +4,7 @@
 
 .preview {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
+  max-width: 100%;
   -webkit-filter: blur(30px);
   filter: blur(20px);
   opacity: 1;
