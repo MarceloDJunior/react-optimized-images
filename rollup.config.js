@@ -1,7 +1,7 @@
-import resolve from '@rollup/plugin-node-resolve'
-import typescript from '@rollup/plugin-typescript'
-import dts from 'rollup-plugin-dts'
-import postcss from 'rollup-plugin-postcss'
+import resolve from '@rollup/plugin-node-resolve';
+import typescript from '@rollup/plugin-typescript';
+import dts from 'rollup-plugin-dts';
+import postcss from 'rollup-plugin-postcss';
 
 export default [
   {
@@ -29,4 +29,4 @@ export default [
     output: [{ file: 'dist/index.d.ts', format: 'esm' }],
     plugins: [dts()],
   },
-]
+];
