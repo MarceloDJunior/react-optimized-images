@@ -1,5 +1,8 @@
 .container {
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .preview {
@@ -8,6 +11,7 @@
   -webkit-filter: blur(30px);
   filter: blur(20px);
   opacity: 1;
+  pointer-events: none;
 }
 
 .preview.hidden {

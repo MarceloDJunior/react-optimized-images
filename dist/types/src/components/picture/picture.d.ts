@@ -3,4 +3,4 @@ declare type Props = DetailedHTMLProps<ImgHTMLAttributes<HTMLImageElement>, HTML
     src: string;
 };
 export declare const Picture: ({ src, className, ...props }: Props) => JSX.Element;
-export default Picture;
+export {};

@@ -1,1 +1,1 @@
-export * from './picture';
+export * from './components';
