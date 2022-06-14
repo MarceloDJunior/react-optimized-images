@@ -7,9 +7,14 @@ import React, {
   useRef,
   useState,
 } from 'react';
-
 import { breakpoints, enabled } from 'react-optimized-images/config';
+import {
+  getImageExtension,
+  getImageType,
+  getImageWithoutExtension,
+} from '../../helpers/image-helper';
 import { useIntersectionObserver } from '../../hooks/use-intersection-observer';
+import { Preview } from '../preview/preview';
 
 import styles from './picture.module.css';
 
@@ -26,33 +31,12 @@ type Breakpoint = {
   resizeTo: number;
 };
 
-const getImageWithoutExtension = (fileName: string): string => {
-  return fileName.substring(0, fileName.lastIndexOf('.'));
-};
-
-const getImageType = (fileName: string): string => {
-  if (
-    fileName.toLowerCase().endsWith('jpg') ||
-    fileName.toLowerCase().endsWith('jpeg')
-  ) {
-    return 'image/jpeg';
-  }
-  return `image/${fileName
-    .substring(fileName.lastIndexOf('.') + 1)
-    .toLowerCase()}`;
-};
-
-const getImageExtension = (fileName: string): string => {
-  return fileName.substring(fileName.lastIndexOf('.') + 1).toLowerCase();
-};
-
 export const Picture = ({ src, className, lazy, ...props }: Props) => {
   const [hasError, setHasError] = useState(false);
   const [hasLoadedPreview, setHasLoadedPreview] = useState(false);
   const [hasLoadedPicture, setHasLoadedPicture] = useState(lazy ? false : true);
   const [isIntersecting, setIsIntersecting] = useState(lazy ? false : true);
   const containerRef = useRef<HTMLDivElement>(null);
-  const previewRef = useRef<HTMLImageElement>(null);
   const pictureRef = useRef<HTMLImageElement>(null);
 
   const handleError = useCallback(() => {
@@ -62,10 +46,8 @@ export const Picture = ({ src, className, lazy, ...props }: Props) => {
   }, [hasError]);
 
   const handlePreviewLoad = useCallback(() => {
-    if (!hasLoadedPreview) {
-      setHasLoadedPreview(true);
-    }
-  }, [hasLoadedPreview]);
+    setHasLoadedPreview(true);
+  }, []);
 
   const handlePictureLoad = useCallback(() => {
     if (!hasLoadedPicture) {
@@ -82,31 +64,6 @@ export const Picture = ({ src, className, lazy, ...props }: Props) => {
   );
 
   const extension = useMemo(() => getImageExtension(src), [src]);
-
-  const preview = useMemo(() => {
-    if (!lazy) {
-      return null;
-    }
-    return (
-      <img
-        ref={previewRef}
-        src={`${imageWithoutExtension}@preview.jpg`}
-        className={`${className} ${styles.preview} ${
-          hasLoadedPicture ? styles.hidden : ''
-        }`}
-        loading="eager"
-        onLoad={handlePreviewLoad}
-        {...props}
-      />
-    );
-  }, [
-    className,
-    handlePreviewLoad,
-    hasLoadedPicture,
-    imageWithoutExtension,
-    lazy,
-    props,
-  ]);
 
   const renderSources = useCallback(() => {
     const webpImages = breakpoints.map(({ maxWidth, resizeTo }: Breakpoint) => (
@@ -149,13 +106,6 @@ export const Picture = ({ src, className, lazy, ...props }: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
-    if (previewRef.current?.complete) {
-      handlePreviewLoad();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   useIntersectionObserver({
     active: hasLoadedPreview && lazy,
     target: containerRef,
@@ -193,7 +143,15 @@ export const Picture = ({ src, className, lazy, ...props }: Props) => {
         className={styles.container}
         style={containerStyle}
       >
-        {preview}
+        {lazy ? (
+          <Preview
+            src={`${imageWithoutExtension}@preview.jpg`}
+            className={className}
+            onPreviewLoad={handlePreviewLoad}
+            hidden={hasLoadedPreview}
+            {...props}
+          />
+        ) : null}
         {isIntersecting && (
           <picture
             className={className}

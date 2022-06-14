@@ -4,18 +4,3 @@
   align-items: center;
   justify-content: center;
 }
-
-.preview {
-  position: absolute;
-  max-width: 100%;
-  -webkit-filter: blur(30px);
-  filter: blur(20px);
-  opacity: 1;
-  pointer-events: none;
-}
-
-.preview.hidden {
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s;
-}
