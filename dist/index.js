@@ -218,7 +218,7 @@ var Picture = function (_a) {
     }, [props.height, props.style, props.width]);
     if (config.enabled) {
         return (React__default["default"].createElement("div", { ref: containerRef, className: styles.container, style: containerStyle },
-            lazy ? (React__default["default"].createElement(Preview, __assign({ src: "".concat(imageWithoutExtension, "@preview.jpg"), className: className, onPreviewLoad: handlePreviewLoad, hidden: hasLoadedPreview }, props))) : null,
+            lazy ? (React__default["default"].createElement(Preview, __assign({ src: "".concat(imageWithoutExtension, "@preview.jpg"), className: className, onPreviewLoad: handlePreviewLoad, hidden: hasLoadedPicture }, props))) : null,
             isIntersecting && (React__default["default"].createElement("picture", { className: className, style: {
                     visibility: hasLoadedPicture ? 'visible' : 'hidden',
                     height: hasLoadedPicture ? undefined : '0',

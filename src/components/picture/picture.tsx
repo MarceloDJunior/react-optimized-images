@@ -155,7 +155,7 @@ export const Picture = ({
             src={`${imageWithoutExtension}@preview.jpg`}
             className={className}
             onPreviewLoad={handlePreviewLoad}
-            hidden={hasLoadedPreview}
+            hidden={hasLoadedPicture}
             {...props}
           />
         ) : null}
