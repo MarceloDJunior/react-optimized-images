@@ -5,6 +5,8 @@ declare type Breakpoint = {
 declare type Options = {
   minWidth?: number;
   breakpoints?: Breakpoint[];
+  enabled?: boolean;
+  lazy?: boolean;
 };
 declare class OptimizedImagesPlugin {
   constructor(options: Options);

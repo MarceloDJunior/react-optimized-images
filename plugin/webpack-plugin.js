@@ -23,6 +23,7 @@ const defaultConfig = {
     },
   ],
   enabled: true,
+  lazy: false,
 };
 
 class OptimizedImagesPlugin {
@@ -33,6 +34,7 @@ class OptimizedImagesPlugin {
       minWidth: options?.minWidth ?? defaultConfig.minWidth,
       breakpoints: options?.breakpoints ?? defaultConfig.breakpoints,
       enabled: options?.enabled ?? defaultConfig.enabled,
+      lazy: options?.lazy ?? defaultConfig.lazy,
     };
     this.options = customOptions;
   }
@@ -64,16 +66,7 @@ class OptimizedImagesPlugin {
   }
 
   applyCustomConfig() {
-    const { minWidth, breakpoints, enabled } = this.options;
-    const newJsonConfig = JSON.stringify(
-      {
-        minWidth,
-        breakpoints,
-        enabled,
-      },
-      null,
-      2
-    );
+    const newJsonConfig = JSON.stringify(this.options, null, 2);
     fs.writeFileSync(NEW_CONFIG_OUTPUT, newJsonConfig);
   }
 

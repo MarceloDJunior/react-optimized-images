@@ -7,7 +7,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { breakpoints, enabled } from 'react-optimized-images/config';
+import { breakpoints, enabled, lazy } from 'react-optimized-images/config';
 import {
   getImageExtension,
   getImageType,
@@ -31,7 +31,14 @@ type Breakpoint = {
   resizeTo: number;
 };
 
-export const Picture = ({ src, className, lazy, ...props }: Props) => {
+const defaultLazy = lazy || false;
+
+export const Picture = ({
+  src,
+  className,
+  lazy = defaultLazy,
+  ...props
+}: Props) => {
   const [hasError, setHasError] = useState(false);
   const [hasLoadedPreview, setHasLoadedPreview] = useState(false);
   const [hasLoadedPicture, setHasLoadedPicture] = useState(lazy ? false : true);
