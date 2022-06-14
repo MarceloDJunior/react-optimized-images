@@ -18,6 +18,7 @@ type Props = DetailedHTMLProps<
   HTMLImageElement
 > & {
   src: string;
+  lazy?: boolean;
 };
 
 type Breakpoint = {
@@ -45,11 +46,11 @@ const getImageExtension = (fileName: string): string => {
   return fileName.substring(fileName.lastIndexOf('.') + 1).toLowerCase();
 };
 
-export const Picture = ({ src, className, ...props }: Props) => {
+export const Picture = ({ src, className, lazy, ...props }: Props) => {
   const [hasError, setHasError] = useState(false);
   const [hasLoadedPreview, setHasLoadedPreview] = useState(false);
-  const [hasLoadedPicture, setHasLoadedPicture] = useState(false);
-  const [isIntersecting, setIsIntersecting] = useState(false);
+  const [hasLoadedPicture, setHasLoadedPicture] = useState(lazy ? false : true);
+  const [isIntersecting, setIsIntersecting] = useState(lazy ? false : true);
   const containerRef = useRef<HTMLDivElement>(null);
   const previewRef = useRef<HTMLImageElement>(null);
   const pictureRef = useRef<HTMLImageElement>(null);
@@ -83,6 +84,9 @@ export const Picture = ({ src, className, ...props }: Props) => {
   const extension = useMemo(() => getImageExtension(src), [src]);
 
   const preview = useMemo(() => {
+    if (!lazy) {
+      return null;
+    }
     return (
       <img
         ref={previewRef}
@@ -100,6 +104,7 @@ export const Picture = ({ src, className, ...props }: Props) => {
     handlePreviewLoad,
     hasLoadedPicture,
     imageWithoutExtension,
+    lazy,
     props,
   ]);
 
@@ -152,7 +157,7 @@ export const Picture = ({ src, className, ...props }: Props) => {
   }, []);
 
   useIntersectionObserver({
-    active: hasLoadedPreview,
+    active: hasLoadedPreview && lazy,
     target: containerRef,
     onIntersect: ([entry], observerElement) => {
       if (entry.isIntersecting) {
@@ -208,7 +213,7 @@ export const Picture = ({ src, className, ...props }: Props) => {
               onError={handleError}
               style={{
                 ...props.style,
-                maxHeight: '0 !important',
+                maxHeight: lazy ? '0 !important' : undefined,
               }}
             />
           </picture>

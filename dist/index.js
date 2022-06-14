@@ -93,7 +93,7 @@ function styleInject(css, ref) {
   }
 }
 
-var css_248z = ".picture-module_container__Ua9Az{align-items:center;display:flex;justify-content:center;position:relative}.picture-module_preview__dk12T{-webkit-filter:blur(30px);filter:blur(20px);max-width:100%;opacity:1;pointer-events:none;position:absolute}.picture-module_preview__dk12T.picture-module_hidden__f1Wm1{opacity:0;pointer-events:none;transition:opacity .3s}";
+var css_248z = ".picture-module_container__Ua9Az {\n  position: relative;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n\n.picture-module_preview__dk12T {\n  position: absolute;\n  max-width: 100%;\n  -webkit-filter: blur(30px);\n  filter: blur(20px);\n  opacity: 1;\n  pointer-events: none;\n}\n\n.picture-module_preview__dk12T.picture-module_hidden__f1Wm1 {\n  opacity: 0;\n  pointer-events: none;\n  transition: opacity 0.3s;\n}\n";
 var styles = {"container":"picture-module_container__Ua9Az","preview":"picture-module_preview__dk12T","hidden":"picture-module_hidden__f1Wm1"};
 styleInject(css_248z);
 
@@ -113,11 +113,11 @@ var getImageExtension = function (fileName) {
     return fileName.substring(fileName.lastIndexOf('.') + 1).toLowerCase();
 };
 var Picture = function (_a) {
-    var src = _a.src, className = _a.className, props = __rest(_a, ["src", "className"]);
+    var src = _a.src, className = _a.className, lazy = _a.lazy, props = __rest(_a, ["src", "className", "lazy"]);
     var _b = React.useState(false), hasError = _b[0], setHasError = _b[1];
     var _c = React.useState(false), hasLoadedPreview = _c[0], setHasLoadedPreview = _c[1];
-    var _d = React.useState(false), hasLoadedPicture = _d[0], setHasLoadedPicture = _d[1];
-    var _e = React.useState(false), isIntersecting = _e[0], setIsIntersecting = _e[1];
+    var _d = React.useState(lazy ? false : true), hasLoadedPicture = _d[0], setHasLoadedPicture = _d[1];
+    var _e = React.useState(lazy ? false : true), isIntersecting = _e[0], setIsIntersecting = _e[1];
     var containerRef = React.useRef(null);
     var previewRef = React.useRef(null);
     var pictureRef = React.useRef(null);
@@ -142,12 +142,16 @@ var Picture = function (_a) {
     var imageWithoutExtension = React.useMemo(function () { return getImageWithoutExtension(src); }, [src]);
     var extension = React.useMemo(function () { return getImageExtension(src); }, [src]);
     var preview = React.useMemo(function () {
+        if (!lazy) {
+            return null;
+        }
         return (React__default["default"].createElement("img", __assign({ ref: previewRef, src: "".concat(imageWithoutExtension, "@preview.jpg"), className: "".concat(className, " ").concat(styles.preview, " ").concat(hasLoadedPicture ? styles.hidden : ''), loading: "eager", onLoad: handlePreviewLoad }, props)));
     }, [
         className,
         handlePreviewLoad,
         hasLoadedPicture,
         imageWithoutExtension,
+        lazy,
         props,
     ]);
     var renderSources = React.useCallback(function () {
@@ -179,7 +183,7 @@ var Picture = function (_a) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
     useIntersectionObserver({
-        active: hasLoadedPreview,
+        active: hasLoadedPreview && lazy,
         target: containerRef,
         onIntersect: function (_a, observerElement) {
             var entry = _a[0];
@@ -213,7 +217,7 @@ var Picture = function (_a) {
                 } },
                 !hasError && renderSources(),
                 React__default["default"].createElement("source", { srcSet: src, type: "image/".concat(extension) }),
-                React__default["default"].createElement("img", __assign({ ref: pictureRef, src: src, className: className }, props, { onLoad: handlePictureLoad, onError: handleError, style: __assign(__assign({}, props.style), { maxHeight: '0 !important' }) }))))));
+                React__default["default"].createElement("img", __assign({ ref: pictureRef, src: src, className: className }, props, { onLoad: handlePictureLoad, onError: handleError, style: __assign(__assign({}, props.style), { maxHeight: lazy ? '0 !important' : undefined }) }))))));
     }
     return React__default["default"].createElement("img", __assign({ src: src, className: className }, props));
 };
