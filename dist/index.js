@@ -47,6 +47,22 @@ function __rest(s, e) {
     return t;
 }
 
+var getImageWithoutExtension = function (fileName) {
+    return fileName.substring(0, fileName.lastIndexOf('.'));
+};
+var getImageType = function (fileName) {
+    if (fileName.toLowerCase().endsWith('jpg') ||
+        fileName.toLowerCase().endsWith('jpeg')) {
+        return 'image/jpeg';
+    }
+    return "image/".concat(fileName
+        .substring(fileName.lastIndexOf('.') + 1)
+        .toLowerCase());
+};
+var getImageExtension = function (fileName) {
+    return fileName.substring(fileName.lastIndexOf('.') + 1).toLowerCase();
+};
+
 var useIntersectionObserver = function (_a) {
     var _b = _a.active, active = _b === void 0 ? true : _b, target = _a.target, onIntersect = _a.onIntersect, _c = _a.threshold, threshold = _c === void 0 ? 0.1 : _c, _d = _a.rootMargin, rootMargin = _d === void 0 ? 0 : _d;
     React.useEffect(function () {
@@ -93,33 +109,47 @@ function styleInject(css, ref) {
   }
 }
 
-var css_248z = ".picture-module_container__Ua9Az {\n  position: relative;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n\n.picture-module_preview__dk12T {\n  position: absolute;\n  max-width: 100%;\n  -webkit-filter: blur(30px);\n  filter: blur(20px);\n  opacity: 1;\n  pointer-events: none;\n}\n\n.picture-module_preview__dk12T.picture-module_hidden__f1Wm1 {\n  opacity: 0;\n  pointer-events: none;\n  transition: opacity 0.3s;\n}\n";
-var styles = {"container":"picture-module_container__Ua9Az","preview":"picture-module_preview__dk12T","hidden":"picture-module_hidden__f1Wm1"};
+var css_248z$1 = ".preview-module_preview__NdipQ {\n  position: absolute;\n  max-width: 100%;\n  -webkit-filter: blur(30px);\n  filter: blur(20px);\n  opacity: 1;\n  pointer-events: none;\n}\n\n.preview-module_preview__NdipQ.preview-module_hidden__sZLBN {\n  opacity: 0;\n  pointer-events: none;\n  transition: opacity 0.3s;\n}\n";
+var styles$1 = {"preview":"preview-module_preview__NdipQ","hidden":"preview-module_hidden__sZLBN"};
+styleInject(css_248z$1);
+
+var PreviewComponent = function (_a) {
+    var src = _a.src, className = _a.className, hidden = _a.hidden, onPreviewLoad = _a.onPreviewLoad, props = __rest(_a, ["src", "className", "hidden", "onPreviewLoad"]);
+    var _b = React.useState(false), hasLoaded = _b[0], setHasLoaded = _b[1];
+    var previewRef = React.useRef(null);
+    var handlePreviewLoad = React.useCallback(function () {
+        if (!hasLoaded) {
+            setHasLoaded(true);
+        }
+    }, [hasLoaded]);
+    React.useEffect(function () {
+        var _a;
+        if ((_a = previewRef.current) === null || _a === void 0 ? void 0 : _a.complete) {
+            handlePreviewLoad();
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+    React.useEffect(function () {
+        if (hasLoaded) {
+            onPreviewLoad();
+        }
+    }, [hasLoaded, onPreviewLoad]);
+    return (React__default["default"].createElement("img", __assign({ ref: previewRef, src: src, className: "".concat(className, " ").concat(styles$1.preview, " ").concat(hidden ? styles$1.hidden : ''), loading: "eager", onLoad: handlePreviewLoad }, props)));
+};
+var Preview = React__default["default"].memo(PreviewComponent);
+
+var css_248z = ".picture-module_container__Ua9Az {\n  position: relative;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n";
+var styles = {"container":"picture-module_container__Ua9Az"};
 styleInject(css_248z);
 
-var getImageWithoutExtension = function (fileName) {
-    return fileName.substring(0, fileName.lastIndexOf('.'));
-};
-var getImageType = function (fileName) {
-    if (fileName.toLowerCase().endsWith('jpg') ||
-        fileName.toLowerCase().endsWith('jpeg')) {
-        return 'image/jpeg';
-    }
-    return "image/".concat(fileName
-        .substring(fileName.lastIndexOf('.') + 1)
-        .toLowerCase());
-};
-var getImageExtension = function (fileName) {
-    return fileName.substring(fileName.lastIndexOf('.') + 1).toLowerCase();
-};
+var defaultLazy = config.lazy || false;
 var Picture = function (_a) {
-    var src = _a.src, className = _a.className, lazy = _a.lazy, props = __rest(_a, ["src", "className", "lazy"]);
-    var _b = React.useState(false), hasError = _b[0], setHasError = _b[1];
-    var _c = React.useState(false), hasLoadedPreview = _c[0], setHasLoadedPreview = _c[1];
-    var _d = React.useState(lazy ? false : true), hasLoadedPicture = _d[0], setHasLoadedPicture = _d[1];
-    var _e = React.useState(lazy ? false : true), isIntersecting = _e[0], setIsIntersecting = _e[1];
+    var src = _a.src, className = _a.className, _b = _a.lazy, lazy = _b === void 0 ? defaultLazy : _b, props = __rest(_a, ["src", "className", "lazy"]);
+    var _c = React.useState(false), hasError = _c[0], setHasError = _c[1];
+    var _d = React.useState(false), hasLoadedPreview = _d[0], setHasLoadedPreview = _d[1];
+    var _e = React.useState(lazy ? false : true), hasLoadedPicture = _e[0], setHasLoadedPicture = _e[1];
+    var _f = React.useState(lazy ? false : true), isIntersecting = _f[0], setIsIntersecting = _f[1];
     var containerRef = React.useRef(null);
-    var previewRef = React.useRef(null);
     var pictureRef = React.useRef(null);
     var handleError = React.useCallback(function () {
         if (!hasError) {
@@ -127,10 +157,8 @@ var Picture = function (_a) {
         }
     }, [hasError]);
     var handlePreviewLoad = React.useCallback(function () {
-        if (!hasLoadedPreview) {
-            setHasLoadedPreview(true);
-        }
-    }, [hasLoadedPreview]);
+        setHasLoadedPreview(true);
+    }, []);
     var handlePictureLoad = React.useCallback(function () {
         if (!hasLoadedPicture) {
             setHasLoadedPicture(true);
@@ -141,19 +169,6 @@ var Picture = function (_a) {
     }, [hasLoadedPicture]);
     var imageWithoutExtension = React.useMemo(function () { return getImageWithoutExtension(src); }, [src]);
     var extension = React.useMemo(function () { return getImageExtension(src); }, [src]);
-    var preview = React.useMemo(function () {
-        if (!lazy) {
-            return null;
-        }
-        return (React__default["default"].createElement("img", __assign({ ref: previewRef, src: "".concat(imageWithoutExtension, "@preview.jpg"), className: "".concat(className, " ").concat(styles.preview, " ").concat(hasLoadedPicture ? styles.hidden : ''), loading: "eager", onLoad: handlePreviewLoad }, props)));
-    }, [
-        className,
-        handlePreviewLoad,
-        hasLoadedPicture,
-        imageWithoutExtension,
-        lazy,
-        props,
-    ]);
     var renderSources = React.useCallback(function () {
         var webpImages = config.breakpoints.map(function (_a) {
             var maxWidth = _a.maxWidth, resizeTo = _a.resizeTo;
@@ -172,13 +187,6 @@ var Picture = function (_a) {
         var _a;
         if ((_a = pictureRef.current) === null || _a === void 0 ? void 0 : _a.complete) {
             handlePictureLoad();
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-    React.useEffect(function () {
-        var _a;
-        if ((_a = previewRef.current) === null || _a === void 0 ? void 0 : _a.complete) {
-            handlePreviewLoad();
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -210,7 +218,7 @@ var Picture = function (_a) {
     }, [props.height, props.style, props.width]);
     if (config.enabled) {
         return (React__default["default"].createElement("div", { ref: containerRef, className: styles.container, style: containerStyle },
-            preview,
+            lazy ? (React__default["default"].createElement(Preview, __assign({ src: "".concat(imageWithoutExtension, "@preview.jpg"), className: className, onPreviewLoad: handlePreviewLoad, hidden: hasLoadedPreview }, props))) : null,
             isIntersecting && (React__default["default"].createElement("picture", { className: className, style: {
                     visibility: hasLoadedPicture ? 'visible' : 'hidden',
                     height: hasLoadedPicture ? undefined : '0',
