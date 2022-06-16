@@ -1,6 +1,6 @@
 # react-optimized-images
-[![npm version](https://badge.fury.io/js/react-optimized-images.svg)](https://badge.fury.io/js/react-optimized-images)
 
+[![npm version](https://badge.fury.io/js/react-optimized-images.svg)](https://badge.fury.io/js/react-optimized-images)
 
 A package to optimize images for React! It generates and uses responsive webp images with fallback to other formats, keeping great performance on modern browsers and still supporting old browsers.
 
@@ -9,12 +9,32 @@ NOTE: If you created your app with CRA and it's not ejected or you don't have we
 ## Table of contents
 
 - [Table of contents](#table-of-contents)
+- [Features](#features)
+- [Requirements](#requirements)
 - [Installation](#installation)
 - [Usage](#usage)
   - [Webpack plugin](#webpack-plugin)
   - [Next.js plugin](#nextjs-plugin)
   - [Picture component](#picture-component)
 - [License](#license)
+
+## Features
+
+- Generate webp images with fallback to default format to support old browsers.
+- Generate smaller images based on breakpoints to improve load speed on smaller devices.
+- Lazy load images that are not on the screen and generate a very light blurry version for preview (Optional).
+
+NOTE: Currently only images that are located within the project will be optimized
+
+#### TODO
+
+- Add image optimization for external images.
+- Add unit tests.
+
+## Requirements
+
+- Node v14.0.0 or above installed.
+- Webpack as your project bundler.
 
 ## Installation
 
@@ -35,7 +55,7 @@ yarn add react-optimized-images
 This package generates images at build time, so you need to add the webpack plugin in your `webpack.config.js`.
 
 ```javascript
-const OptimizedImagesPlugin = require('react-optimized-images/plugin')
+const OptimizedImagesPlugin = require('react-optimized-images/plugin');
 
 module.exports = {
   // ... webpack config
@@ -43,16 +63,17 @@ module.exports = {
     // ... other plugins
     new OptimizedImagesPlugin({ ...options }),
   ],
-}
+};
 ```
 
 #### Options
 
-| Name        | Type    | Default value                         | Description                                                                                           |
-| ----------- | ------- | ------------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| minWidth    | number  | 200                                   | Mininum image width to create smaller versions.                                                       |
-| breakpoints | array   | [Default value](#default-breakpoints) | Specifies the breakpoints to generate responsive images. You can add as many breakpoints as you want. |
-| enabled     | boolean | true                                  | If false, the images won't be generated and the component will render a regular image.                |
+| Name        | Type    | Default value                         | Description                                                                                                                                 |
+| ----------- | ------- | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| minWidth    | number  | 200                                   | Mininum image width to create smaller versions.                                                                                             |
+| breakpoints | array   | [Default value](#default-breakpoints) | Specifies the breakpoints to generate responsive images. You can add as many breakpoints as you want.                                       |
+| enabled     | boolean | true                                  | If false, the images won't be generated and the component will render a regular image.                                                      |
+| lazy        | boolean | false                                 | If true, all the images in the `Picture` component will be lazy loaded by default. It can be overriden by the `lazy` prop in the component. |
 
 ##### Default breakpoints
 
@@ -67,13 +88,13 @@ module.exports = {
     maxWidth: 992,
     resizeTo: 70,
   },
-]
+];
 ```
 
 Complete custom configuration example:
 
 ```javascript
-const OptimizedImagesPlugin = require('react-optimized-images/plugin')
+const OptimizedImagesPlugin = require('react-optimized-images/plugin');
 
 module.exports = {
   // ... webpack config
@@ -92,9 +113,10 @@ module.exports = {
         },
       ],
       enabled: process.env.NODE_ENV === 'production',
+      lazy: false,
     }),
   ],
-}
+};
 ```
 
 ### Next.js plugin
@@ -102,15 +124,15 @@ module.exports = {
 This package also has a plugin for Next.js projects. In your `next.config.js` add:
 
 ```javascript
-const withOptimizedImages = require('react-optimized-images/next')
+const withOptimizedImages = require('react-optimized-images/next');
 
-module.exports = withOptimizedImages()
+module.exports = withOptimizedImages();
 ```
 
 Example with custom configuration:
 
 ```javascript
-const withOptimizedImages = require('react-optimized-images/next')
+const withOptimizedImages = require('react-optimized-images/next');
 
 module.exports = withOptimizedImages({
   minWidth: 300,
@@ -124,14 +146,14 @@ module.exports = withOptimizedImages({
       resizeTo: 80,
     },
   ],
-})
+});
 ```
 
 Or if you use `next-compose-plugins`:
 
 ```javascript
-const withPlugins = require('next-compose-plugins')
-const optimizedImages = require('react-optimized-images/next')
+const withPlugins = require('next-compose-plugins');
+const optimizedImages = require('react-optimized-images/next');
 
 module.exports = withPlugins([
   // other plugins
@@ -143,7 +165,7 @@ module.exports = withPlugins([
     },
     */
   ],
-])
+]);
 ```
 
 ### Picture component
@@ -153,10 +175,10 @@ For an easier use of the generated images, you can use the `Picture` component, 
 #### Usage
 
 ```javascript
-import React from 'react'
-import { Picture } from 'react-optimized-images'
+import React from 'react';
+import { Picture } from 'react-optimized-images';
 
-import CoffeeJpg from '../assets/coffee.jpg'
+import CoffeeJpg from '../assets/coffee.jpg';
 
 export default function Home() {
   return (
@@ -167,7 +189,7 @@ export default function Home() {
       {/* ..or if it comes from public folder */}
       <Picture src="/coffee.jpg" />
     </div>
-  )
+  );
 }
 ```
 
@@ -203,7 +225,12 @@ The output will be like
 
 #### Properties
 
-It uses the same properties from HTML `<img>` tag. The only mandatory property is `src`.
+It uses the same properties from HTML `<img>` tag. Along with some specific properties as shown below:
+
+| Name | Type | Default value | Description |
+| ---- | ---- | ------------- | ----------- |
+| lazy | boolean | false | If true, the image will be loaded only when content is ready and the image is inside the viewport.
+| preview | ReactNode | undefined | A custom preview to be shown during image load if `lazy` is true. If preview is not set and `height` and `width` props are defined, a blurry version of the original image will be shown.
 
 ## License
 
