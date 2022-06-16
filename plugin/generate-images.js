@@ -25,8 +25,8 @@ function generatePreview(file, width, height) {
   }
   sharp(file)
     .resize(Math.floor(newWidth), Math.floor(newHeight))
-    .jpeg({ quality: 20 })
-    .toFile(`${fileWithoutExtension}@preview.jpg`);
+    .webp({ quality: 20 })
+    .toFile(`${fileWithoutExtension}@preview.webp`);
 }
 
 function generateRegularImages(file, width, height) {

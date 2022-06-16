@@ -109,7 +109,7 @@ export const Picture = ({
       }
       return (
         <Preview
-          src={`${imageWithoutExtension}@preview.jpg`}
+          src={`${imageWithoutExtension}@preview.webp`}
           className={`${className || ''} ${
             hasLoadedPreview ? styles.hidden : ''
           }`}
@@ -203,7 +203,7 @@ export const Picture = ({
     }
     return {
       ...props.style,
-      width: width ? `min(${width}, 100%)` : '100%',
+      width: width ? `min(${width}, 100%)` : 'auto',
       minHeight: height,
     };
   }, [props.height, props.style, props.width]);
