@@ -138,7 +138,7 @@ var PreviewComponent = function (_a) {
 };
 var Preview = React__default["default"].memo(PreviewComponent);
 
-var css_248z = ".picture-module_container__Ua9Az {\n  position: relative;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n";
+var css_248z = ".picture-module_container__Ua9Az {\n  position: relative;\n  display: table;\n}\n";
 var styles = {"container":"picture-module_container__Ua9Az"};
 styleInject(css_248z);
 
