@@ -2,7 +2,7 @@
 
 [![npm version](https://badge.fury.io/js/react-optimized-images.svg)](https://badge.fury.io/js/react-optimized-images)
 
-A package to optimize images for React! It generates and uses responsive webp images with fallback to other formats, keeping great performance on modern browsers and still supporting old browsers.
+A package to optimize images for React! It generates and uses responsive webp images with fallback to other formats, resulting in great performance on modern browsers and still supporting old browsers.
 
 NOTE: If you created your app with CRA and it's not ejected or you don't have webpack as your bundler, you can use [v1](https://www.npmjs.com/package/react-optimized-images/v/1.2.2).
 
@@ -20,16 +20,20 @@ NOTE: If you created your app with CRA and it's not ejected or you don't have we
 
 ## Features
 
-- Generate webp images with fallback to default format to support old browsers.
-- Generate smaller images based on breakpoints to improve load speed on smaller devices.
-- Lazy load images that are not on the screen and generate a very light blurry version for preview (Optional).
+- Convert images to webp during build time.
+- Create smaller versions of images based on breakpoints to avoid unnecessary load of big images on smaller devices.
+- Lazy load images that are not in the viewport.
+- React Component to make use of all the features with ease.
 
-NOTE: Currently only images that are located within the project will be optimized
+NOTE: Currently only images that are located within the project will be optimized.
 
 #### TODO
 
 - Add image optimization for external images.
+- Add image optimization for CSS background images.
+- Add support to older Node versions.
 - Add unit tests.
+- Add custom configuration at component level.
 
 ## Requirements
 
