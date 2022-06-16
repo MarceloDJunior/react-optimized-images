@@ -1,0 +1,8 @@
+.preview {
+  position: absolute;
+  max-width: 100%;
+  -webkit-filter: blur(30px);
+  filter: blur(20px);
+  opacity: 1;
+  pointer-events: none;
+}

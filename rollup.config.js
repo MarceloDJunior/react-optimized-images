@@ -1,6 +1,8 @@
-import resolve from '@rollup/plugin-node-resolve'
-import typescript from '@rollup/plugin-typescript'
-import dts from 'rollup-plugin-dts'
+import resolve from '@rollup/plugin-node-resolve';
+import typescript from '@rollup/plugin-typescript';
+import dts from 'rollup-plugin-dts';
+import postcss from 'rollup-plugin-postcss';
+import del from 'rollup-plugin-delete';
 
 export default [
   {
@@ -17,12 +19,15 @@ export default [
       typescript({
         tsconfig: './tsconfig.json',
       }),
+      postcss({
+        extensions: ['.css'],
+      }),
     ],
     external: ['react-optimized-images/config'],
   },
   {
     input: 'dist/types/src/index.d.ts',
     output: [{ file: 'dist/index.d.ts', format: 'esm' }],
-    plugins: [dts()],
+    plugins: [dts(), del({ hook: 'buildEnd', targets: 'dist/types' })],
   },
-]
+];

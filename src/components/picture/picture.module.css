@@ -1,0 +1,19 @@
+.container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.preview-container {
+  opacity: 1;
+  position: absolute;
+  max-width: 100%;
+  pointer-events: none;
+}
+
+.hidden {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
