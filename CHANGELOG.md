@@ -1,3 +1,16 @@
+# [2.1.0](https://github.com/MarceloDJunior/react-optimized-images/compare/v2.0.1...v2.1.0) (2022-06-16)
+
+
+### Features
+
+* add custom preview during lazy load ([e5479eb](https://github.com/MarceloDJunior/react-optimized-images/commit/e5479eb064524e8e9452b35586d3f80fd7581227))
+* add default lazy load option in webpack custom config ([0a19715](https://github.com/MarceloDJunior/react-optimized-images/commit/0a19715e56b5cd8d1fcf8ad61dcfbc335fa0afec))
+* add lazy load to images ([60339c0](https://github.com/MarceloDJunior/react-optimized-images/commit/60339c07db54fcd2282bfa7105d81151d66a922a))
+* add lazy option in picture props ([c092850](https://github.com/MarceloDJunior/react-optimized-images/commit/c092850caafb6e6651f7d920c9ea7bfef5b52200))
+* generate blurred preview images ([0f8cac4](https://github.com/MarceloDJunior/react-optimized-images/commit/0f8cac4eb44f09904b903ccececdeb1ce83602c6))
+
+
+
 ## [2.0.1](https://github.com/MarceloDJunior/react-optimized-images/compare/v2.0.0...v2.0.1) (2022-06-07)
 
 
