@@ -13,14 +13,12 @@ type PreviewProps = Omit<
   DetailedHTMLProps<ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement>,
   'ref'
 > & {
-  hidden?: boolean;
   onPreviewLoad: () => void;
 };
 
 const PreviewComponent = ({
   src,
   className,
-  hidden,
   onPreviewLoad,
   ...props
 }: PreviewProps) => {
@@ -50,9 +48,7 @@ const PreviewComponent = ({
     <img
       ref={previewRef}
       src={src}
-      className={`${className} ${styles.preview} ${
-        hidden ? styles.hidden : ''
-      }`}
+      className={`${className} ${styles.preview}`}
       loading="eager"
       onLoad={handlePreviewLoad}
       {...props}

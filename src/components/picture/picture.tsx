@@ -18,12 +18,13 @@ import { Preview } from '../preview/preview';
 
 import styles from './picture.module.css';
 
-type Props = DetailedHTMLProps<
+type PictureProps = DetailedHTMLProps<
   ImgHTMLAttributes<HTMLImageElement>,
   HTMLImageElement
 > & {
   src: string;
   lazy?: boolean;
+  preview?: React.ReactNode;
 };
 
 type Breakpoint = {
@@ -37,8 +38,9 @@ export const Picture = ({
   src,
   className,
   lazy = defaultLazy,
+  preview,
   ...props
-}: Props) => {
+}: PictureProps) => {
   const [hasError, setHasError] = useState(false);
   const [hasLoadedPreview, setHasLoadedPreview] = useState(false);
   const [hasLoadedPicture, setHasLoadedPicture] = useState(lazy ? false : true);
@@ -69,6 +71,63 @@ export const Picture = ({
     () => getImageWithoutExtension(src),
     [src]
   );
+
+  const shouldRenderPreview = useMemo(() => {
+    if (!lazy) {
+      return false;
+    }
+
+    if (preview) {
+      return true;
+    }
+
+    const hasHeightSet = !!props.height || !!props.style?.height;
+    const hasWidthSet = !!props.width || !!props.style?.width;
+
+    return hasHeightSet && hasWidthSet;
+  }, [
+    lazy,
+    preview,
+    props.height,
+    props.style?.height,
+    props.style?.width,
+    props.width,
+  ]);
+
+  const previewComponent = useMemo(() => {
+    if (shouldRenderPreview) {
+      if (preview) {
+        return (
+          <div
+            className={`${styles['preview-container']} ${
+              hasLoadedPreview ? styles.hidden : ''
+            }`}
+          >
+            {preview}
+          </div>
+        );
+      }
+      return (
+        <Preview
+          src={`${imageWithoutExtension}@preview.jpg`}
+          className={`${className || ''} ${
+            hasLoadedPreview ? styles.hidden : ''
+          }`}
+          onPreviewLoad={handlePreviewLoad}
+          {...props}
+        />
+      );
+    }
+    return null;
+  }, [
+    className,
+    handlePreviewLoad,
+    hasLoadedPreview,
+    imageWithoutExtension,
+    preview,
+    props,
+    shouldRenderPreview,
+  ]);
 
   const extension = useMemo(() => getImageExtension(src), [src]);
 
@@ -113,6 +172,12 @@ export const Picture = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    if (!shouldRenderPreview || preview) {
+      handlePreviewLoad();
+    }
+  }, [handlePreviewLoad, preview, shouldRenderPreview]);
+
   useIntersectionObserver({
     active: hasLoadedPreview && lazy,
     target: containerRef,
@@ -150,15 +215,7 @@ export const Picture = ({
         className={styles.container}
         style={containerStyle}
       >
-        {lazy ? (
-          <Preview
-            src={`${imageWithoutExtension}@preview.jpg`}
-            className={className}
-            onPreviewLoad={handlePreviewLoad}
-            hidden={hasLoadedPicture}
-            {...props}
-          />
-        ) : null}
+        {previewComponent}
         {isIntersecting && (
           <picture
             className={className}

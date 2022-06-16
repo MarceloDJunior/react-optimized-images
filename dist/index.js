@@ -109,12 +109,12 @@ function styleInject(css, ref) {
   }
 }
 
-var css_248z$1 = ".preview-module_preview__NdipQ {\n  position: absolute;\n  max-width: 100%;\n  -webkit-filter: blur(30px);\n  filter: blur(20px);\n  opacity: 1;\n  pointer-events: none;\n}\n\n.preview-module_preview__NdipQ.preview-module_hidden__sZLBN {\n  opacity: 0;\n  pointer-events: none;\n  transition: opacity 0.3s;\n}\n";
-var styles$1 = {"preview":"preview-module_preview__NdipQ","hidden":"preview-module_hidden__sZLBN"};
+var css_248z$1 = ".preview-module_preview__NdipQ {\n  position: absolute;\n  max-width: 100%;\n  -webkit-filter: blur(30px);\n  filter: blur(20px);\n  opacity: 1;\n  pointer-events: none;\n}\n";
+var styles$1 = {"preview":"preview-module_preview__NdipQ"};
 styleInject(css_248z$1);
 
 var PreviewComponent = function (_a) {
-    var src = _a.src, className = _a.className, hidden = _a.hidden, onPreviewLoad = _a.onPreviewLoad, props = __rest(_a, ["src", "className", "hidden", "onPreviewLoad"]);
+    var src = _a.src, className = _a.className, onPreviewLoad = _a.onPreviewLoad, props = __rest(_a, ["src", "className", "onPreviewLoad"]);
     var _b = React.useState(false), hasLoaded = _b[0], setHasLoaded = _b[1];
     var previewRef = React.useRef(null);
     var handlePreviewLoad = React.useCallback(function () {
@@ -134,21 +134,22 @@ var PreviewComponent = function (_a) {
             onPreviewLoad();
         }
     }, [hasLoaded, onPreviewLoad]);
-    return (React__default["default"].createElement("img", __assign({ ref: previewRef, src: src, className: "".concat(className, " ").concat(styles$1.preview, " ").concat(hidden ? styles$1.hidden : ''), loading: "eager", onLoad: handlePreviewLoad }, props)));
+    return (React__default["default"].createElement("img", __assign({ ref: previewRef, src: src, className: "".concat(className, " ").concat(styles$1.preview), loading: "eager", onLoad: handlePreviewLoad }, props)));
 };
 var Preview = React__default["default"].memo(PreviewComponent);
 
-var css_248z = ".picture-module_container__Ua9Az {\n  position: relative;\n  display: table;\n}\n";
-var styles = {"container":"picture-module_container__Ua9Az"};
+var css_248z = ".picture-module_container__Ua9Az {\n  position: relative;\n  display: table;\n}\n\n.picture-module_preview-container__YyIVd {\n  opacity: 1;\n  position: absolute;\n  max-width: 100%;\n  pointer-events: none;\n}\n\n.picture-module_hidden__f1Wm1 {\n  opacity: 0;\n  pointer-events: none;\n  transition: opacity 0.3s;\n}\n";
+var styles = {"container":"picture-module_container__Ua9Az","preview-container":"picture-module_preview-container__YyIVd","hidden":"picture-module_hidden__f1Wm1"};
 styleInject(css_248z);
 
 var defaultLazy = config.lazy || false;
 var Picture = function (_a) {
-    var src = _a.src, className = _a.className, _b = _a.lazy, lazy = _b === void 0 ? defaultLazy : _b, props = __rest(_a, ["src", "className", "lazy"]);
-    var _c = React.useState(false), hasError = _c[0], setHasError = _c[1];
-    var _d = React.useState(false), hasLoadedPreview = _d[0], setHasLoadedPreview = _d[1];
-    var _e = React.useState(lazy ? false : true), hasLoadedPicture = _e[0], setHasLoadedPicture = _e[1];
-    var _f = React.useState(lazy ? false : true), isIntersecting = _f[0], setIsIntersecting = _f[1];
+    var _b, _c;
+    var src = _a.src, className = _a.className, _d = _a.lazy, lazy = _d === void 0 ? defaultLazy : _d, preview = _a.preview, props = __rest(_a, ["src", "className", "lazy", "preview"]);
+    var _e = React.useState(false), hasError = _e[0], setHasError = _e[1];
+    var _f = React.useState(false), hasLoadedPreview = _f[0], setHasLoadedPreview = _f[1];
+    var _g = React.useState(lazy ? false : true), hasLoadedPicture = _g[0], setHasLoadedPicture = _g[1];
+    var _h = React.useState(lazy ? false : true), isIntersecting = _h[0], setIsIntersecting = _h[1];
     var containerRef = React.useRef(null);
     var pictureRef = React.useRef(null);
     var handleError = React.useCallback(function () {
@@ -168,6 +169,42 @@ var Picture = function (_a) {
         }
     }, [hasLoadedPicture]);
     var imageWithoutExtension = React.useMemo(function () { return getImageWithoutExtension(src); }, [src]);
+    var shouldRenderPreview = React.useMemo(function () {
+        var _a, _b;
+        if (!lazy) {
+            return false;
+        }
+        if (preview) {
+            return true;
+        }
+        var hasHeightSet = !!props.height || !!((_a = props.style) === null || _a === void 0 ? void 0 : _a.height);
+        var hasWidthSet = !!props.width || !!((_b = props.style) === null || _b === void 0 ? void 0 : _b.width);
+        return hasHeightSet && hasWidthSet;
+    }, [
+        lazy,
+        preview,
+        props.height,
+        (_b = props.style) === null || _b === void 0 ? void 0 : _b.height,
+        (_c = props.style) === null || _c === void 0 ? void 0 : _c.width,
+        props.width,
+    ]);
+    var previewComponent = React.useMemo(function () {
+        if (shouldRenderPreview) {
+            if (preview) {
+                return (React__default["default"].createElement("div", { className: "".concat(styles['preview-container'], " ").concat(hasLoadedPreview ? styles.hidden : '') }, preview));
+            }
+            return (React__default["default"].createElement(Preview, __assign({ src: "".concat(imageWithoutExtension, "@preview.jpg"), className: "".concat(className || '', " ").concat(hasLoadedPreview ? styles.hidden : ''), onPreviewLoad: handlePreviewLoad }, props)));
+        }
+        return null;
+    }, [
+        className,
+        handlePreviewLoad,
+        hasLoadedPreview,
+        imageWithoutExtension,
+        preview,
+        props,
+        shouldRenderPreview,
+    ]);
     var extension = React.useMemo(function () { return getImageExtension(src); }, [src]);
     var renderSources = React.useCallback(function () {
         var webpImages = config.breakpoints.map(function (_a) {
@@ -190,6 +227,11 @@ var Picture = function (_a) {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+    React.useEffect(function () {
+        if (!shouldRenderPreview || preview) {
+            handlePreviewLoad();
+        }
+    }, [handlePreviewLoad, preview, shouldRenderPreview]);
     useIntersectionObserver({
         active: hasLoadedPreview && lazy,
         target: containerRef,
@@ -218,7 +260,7 @@ var Picture = function (_a) {
     }, [props.height, props.style, props.width]);
     if (config.enabled) {
         return (React__default["default"].createElement("div", { ref: containerRef, className: styles.container, style: containerStyle },
-            lazy ? (React__default["default"].createElement(Preview, __assign({ src: "".concat(imageWithoutExtension, "@preview.jpg"), className: className, onPreviewLoad: handlePreviewLoad, hidden: hasLoadedPicture }, props))) : null,
+            previewComponent,
             isIntersecting && (React__default["default"].createElement("picture", { className: className, style: {
                     visibility: hasLoadedPicture ? 'visible' : 'hidden',
                     height: hasLoadedPicture ? undefined : '0',

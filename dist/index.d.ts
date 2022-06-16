@@ -1,9 +1,10 @@
-import { DetailedHTMLProps, ImgHTMLAttributes } from 'react';
+import React, { DetailedHTMLProps, ImgHTMLAttributes } from 'react';
 
-declare type Props = DetailedHTMLProps<ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement> & {
+declare type PictureProps = DetailedHTMLProps<ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement> & {
     src: string;
     lazy?: boolean;
+    preview?: React.ReactNode;
 };
-declare const Picture: ({ src, className, lazy, ...props }: Props) => JSX.Element;
+declare const Picture: ({ src, className, lazy, preview, ...props }: PictureProps) => JSX.Element;
 
 export { Picture };
