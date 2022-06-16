@@ -46,3 +46,5 @@ typings/
 
 # MacOS files
 .DS_Store
+
+/example
