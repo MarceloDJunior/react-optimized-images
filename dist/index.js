@@ -138,7 +138,7 @@ var PreviewComponent = function (_a) {
 };
 var Preview = React__default["default"].memo(PreviewComponent);
 
-var css_248z = ".picture-module_container__Ua9Az {\n  position: relative;\n  display: table;\n}\n\n.picture-module_preview-container__YyIVd {\n  opacity: 1;\n  position: absolute;\n  max-width: 100%;\n  pointer-events: none;\n}\n\n.picture-module_hidden__f1Wm1 {\n  opacity: 0;\n  pointer-events: none;\n  transition: opacity 0.3s;\n}\n";
+var css_248z = ".picture-module_container__Ua9Az {\n  position: relative;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n\n.picture-module_preview-container__YyIVd {\n  opacity: 1;\n  position: absolute;\n  max-width: 100%;\n  pointer-events: none;\n}\n\n.picture-module_hidden__f1Wm1 {\n  opacity: 0;\n  pointer-events: none;\n  transition: opacity 0.3s;\n}\n";
 var styles = {"container":"picture-module_container__Ua9Az","preview-container":"picture-module_preview-container__YyIVd","hidden":"picture-module_hidden__f1Wm1"};
 styleInject(css_248z);
 
@@ -193,7 +193,7 @@ var Picture = function (_a) {
             if (preview) {
                 return (React__default["default"].createElement("div", { className: "".concat(styles['preview-container'], " ").concat(hasLoadedPreview ? styles.hidden : '') }, preview));
             }
-            return (React__default["default"].createElement(Preview, __assign({ src: "".concat(imageWithoutExtension, "@preview.jpg"), className: "".concat(className || '', " ").concat(hasLoadedPreview ? styles.hidden : ''), onPreviewLoad: handlePreviewLoad }, props)));
+            return (React__default["default"].createElement(Preview, __assign({ src: "".concat(imageWithoutExtension, "@preview.webp"), className: "".concat(className || '', " ").concat(hasLoadedPreview ? styles.hidden : ''), onPreviewLoad: handlePreviewLoad }, props)));
         }
         return null;
     }, [
@@ -256,7 +256,7 @@ var Picture = function (_a) {
         if (isNumber(height)) {
             height = "".concat(height, "px");
         }
-        return __assign(__assign({}, props.style), { width: width ? "min(".concat(width, ", 100%)") : '100%', minHeight: height });
+        return __assign(__assign({}, props.style), { width: width ? "min(".concat(width, ", 100%)") : 'auto', minHeight: height });
     }, [props.height, props.style, props.width]);
     if (config.enabled) {
         return (React__default["default"].createElement("div", { ref: containerRef, className: styles.container, style: containerStyle },
